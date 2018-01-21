@@ -30,9 +30,9 @@ Route::get( '/login', 'AuthController@showLogin' )->name('login');
 Route::post( '/login', 'AuthController@doLogin' );
 Route::get( '/logout', 'AuthController@doLogout' )->name( 'logout' );
 
-Route::get('/admin/faculty/assign-courses', 'CoursesController@index' );
-Route::post('/admin/faculty/assign-courses', 'CoursesController@create' );
-Route::put('/admin/faculty/assign-courses', 'CoursesController@store' );
+Route::get('/faculty/assign-courses', 'CoursesController@index' );
+Route::post('/faculty/assign-courses', 'CoursesController@create' );
+Route::put('/faculty/assign-courses', 'CoursesController@store' );
 
 Route::get( '/lab/manage-mark-types', 'LabMarkTypesController@index' );
 Route::post( '/lab/manage-mark-types', 'LabMarkTypesController@create' );

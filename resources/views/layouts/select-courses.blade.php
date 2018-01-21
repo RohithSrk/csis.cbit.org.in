@@ -23,12 +23,11 @@
                                'method' => 'post', 'class' => 'form-horizontal' ) ) }}
 
                                 <div class="panel-body admin-form">
-
                                     <div class="col-md-4">
                                         <div class="section">
                                             <label for="select_semester" class="field-label">Select Semester</label>
                                             <label for="select_semester" class="field">
-                                                {{  Form::select('semester', $semesters_arr, isset($semester_id)? $semester_id : '' , [
+                                                {{  Form::select('semester', $semesters_arr, $semester_id ?? '' , [
                                                     'class' => 'form-control select',
                                                     'id' => 'select_semester' ]) }}
                                             </label>
@@ -39,7 +38,7 @@
                                         <div class="section">
                                             <label for="select_section" class="field-label">Select Section</label>
                                             <label for="select_section" class="field">
-                                                {{  Form::select('section',$sections_arr, isset($section_id)? $section_id : '' , [
+                                                {{  Form::select('section',$sections_arr, $section_id ?? '' , [
                                                     'class' => 'form-control select',
                                                     'id' => 'select_section' ]) }}
                                             </label>
@@ -62,7 +61,7 @@
                                 <div class="panel-heading">
                                     <h4 class="panel-title">Assign Faculty for courses of {{ $semesters_arr[$semester_id] . ' ' . $sections_arr[$section_id] }}</h4>
                                 </div>
-                                {{ Form::open(array('action' => 'CoursesController@store', 'method' => 'put')) }}
+                                {{ Form::open( [ 'action' => 'CoursesController@store', 'method' => 'put' ]  ) }}
                                 {{ Form::hidden('semester', $semester_id) }}
                                 {{ Form::hidden('section', $section_id) }}
 
@@ -84,7 +83,7 @@
 
                                                         <td class="width-250">
                                                             {{Form::select( 'subjects['. $subject->code . '][]',
-                                                              $employees, $subject->getAssignedFaculty( $section_id ),
+                                                              $faculty_arr, $subject->getAssignedFaculty( $section_id ),
                                                               array( 'id' => '', 'class' => 'course-selector form-control',
                                                               'multiple' => 'multiple')) }}
                                                         </td>

@@ -5,7 +5,7 @@
             <a href="/"><i class="fa fa-home"></i><span class="menu-title">Home</span></a>
         </li>
         @if(auth()->user()->hasAnyRole(['HOD', 'Principal']))
-            <li class="menu-item {{ (request()->segment(3) == 'assign-courses' )? 'active' : '' }}">
+            <li class="menu-item {{ (request()->segment(2) == 'assign-courses' )? 'active' : '' }}">
                 <a href="{{ action('CoursesController@index') }}"><i class="fa fa-link"></i><span class="menu-title">Assign Courses</span></a>
             </li>
         @endif

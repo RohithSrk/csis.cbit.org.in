@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Semester;
+use App\User;
 use Illuminate\Http\Request;
 use App\Year;
 use App\Subject;
@@ -16,25 +17,14 @@ class CoursesController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function index() {
-//		if(! auth()->check()) return redirect()->route('login');
-
-
-		auth()->user()->authorizeRoles( [ 'HOD', 'Principal', 'Admin' ] );
+		auth()->user()->authorizeRoles( [ 'HOD', 'Principal', 'Admin', 'Editor' ] );
 
 		$title = "Assign Courses";
 
-//		$employees        = auth()->user()->employee()->first()->departments()->first()->employees()->get();
-//		$practicalCourses = auth()->user()->employee()->first()->departments()->first()
-//								  ->subjects()->where( 'type', 'Practical' )->pluck('name', 'code');
-//		$theoreticalCourses = auth()->user()->employee()->first()->departments()->first()
-//		                          ->subjects()->where( 'type', 'Theory' )->pluck('name', 'code');
-
-		$semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
+		$semesters     = Semester::whereIN( 'year_id', auth()->user()->getDepartmentYearIdsArray() );
 		$semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
-		$sections     = $semesters->first()->sections();
-		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
-
-
+		$sections      = $semesters->first()->sections();
+		$sections_arr  = $sections->pluck( 'name', 'id' )->toArray();
 
 		return view( 'layouts.select-courses', compact( 'title', 'semesters_arr', 'sections_arr' ) );
 	}
@@ -45,44 +35,33 @@ class CoursesController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function create() {
+		auth()->user()->authorizeRoles( [ 'HOD', 'Principal', 'Admin', 'Editor' ] );
 
-		auth()->user()->authorizeRoles( [ 'HOD', 'Principal', 'Admin' ] );
-
-		$this->validate(request(), [
-			'section' => 'required|integer|min:1',
+		$this->validate( request(), [
+			'section'  => 'required|integer|min:1',
 			'semester' => 'required|integer|min:1'
-		]);
+		] );
 
 		$title = "Assign Courses";
 
-//		dd(\request()->all());
+		$semester_id = request( 'semester' );
+		$section_id  = request( 'section' );
 
-		$semester_id    = request( 'semester' );
-		$section_id = request( 'section' );
+		$semester      = Semester::find( $semester_id );
+		$semesters_arr = Semester::whereIN( 'year_id', auth()->user()->getDepartmentYearIdsArray() )
+		                         ->pluck( 'name', 'id' )->toArray();
 
-		$semester = Semester::find( $semester_id );
 		$sections     = $semester->sections();
-
 		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
-		$semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
+		$subjects = $semester->subjects()->get();
 
-		$semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
-
-		//TODO: get only faculty
-
-		$employees        = auth()->user()->employee()->first()->departments()->first()->employees()->pluck('name', 'id')->toArray();
-
-//		$subjects = Subject::whereHas( 'curriculum', function ( $query ) use ( $year_id ) {
-//			$query->where( 'year_id', $year_id );
-//		} )->get();
-
-		$subjects     = $semester->subjects()->get();
-
-
+		$faculty_arr = User::whereHas( 'roles', function ( $q ) {
+			$q->where( 'name', 'Faculty' );
+		} )->with( 'employee' )->get()->pluck( 'employee.name', 'employee.id' )->toArray();
 
 		return view( 'layouts.select-courses', compact( 'title', 'semesters_arr',
-			'sections_arr', 'semester_id', 'section_id', 'subjects' , 'employees' ) );
+			'sections_arr', 'semester_id', 'section_id', 'subjects', 'faculty_arr' ) );
 	}
 
     /**
@@ -93,60 +72,52 @@ class CoursesController extends Controller
      */
     public function store(Request $request)
     {
-	    auth()->user()->authorizeRoles(['HOD', 'Principal']);
+	    auth()->user()->authorizeRoles( [ 'HOD', 'Principal', 'Admin', 'Editor' ] );
+
+	    $this->validate( request(), [
+		    'section'  => 'required',
+		    'semester' => 'required',
+		    'subjects' => 'required'
+	    ] );
+
 	    $title = "Assign Courses";
 
-//
-//	    $employees        = auth()->user()->employee()->first()->departments()->first()->employees()->get();
-//	    $practicalCourses = auth()->user()->employee()->first()->departments()->first()
-//	                              ->subjects()->where( 'type', 'Practical' )->pluck('name', 'code');
-//	    $theoreticalCourses = auth()->user()->employee()->first()->departments()->first()
-//	                                ->subjects()->where( 'type', 'Theory' )->pluck('name', 'code');
-
 	    $subjects_req = $request->get( 'subjects' );
-	    $section_id = request( 'section' );
-	    $semester_id    = request( 'semester' );
+	    $section_id   = $request->get( 'section' );
+	    $semester_id  = $request->get( 'semester' );
 
-//	    dd(empty($subjects_req));
-
-	    if( empty($subjects_req )){
-	    	$subjects_req = [];
-	    }
+	    if( empty($subjects_req )) $subjects_req = [];
 
 	    $subjects = Subject::all();
 
-	    foreach ($subjects as $subject){
-		    $subject->assignedFaculty( $section_id )->detach();
+	    foreach ($subjects as $subject) $subject->assignedFaculty( $section_id )->detach();
+
+	    foreach ( $subjects_req as $subject_code => $employee_ids ) {
+
+		    $subject = Subject::where( 'code', $subject_code )->first();
+
+		    foreach ( $employee_ids as $employee_id ) {
+			    Employee::find( $employee_id )->subjects()->attach( $subject, [ 'section_id' => $section_id ] );
+		    }
 	    }
 
-	    foreach ($subjects_req as $subject_code => $employee_ids){
-
-		    $subject = Subject::where('code', $subject_code)->first();
-
-	        foreach ( $employee_ids as $employee_id ){
-		        Employee::find($employee_id)->subjects()->attach($subject, ['section_id' => $section_id]);
-	        }
-
-        }
-
 	    $semester = Semester::find( $semester_id );
-	    $semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
-	    $semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
+	    $semesters_arr = Semester::whereIN( 'year_id', auth()->user()->getDepartmentYearIdsArray() )
+	                             ->pluck( 'name', 'id' )->toArray();
+
 	    $sections     = $semester->sections();
 	    $sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
-//	    $subjects = Subject::whereHas( 'curriculum', function ( $query ) use ( $year_id ) {
-//		    $query->where( 'year_id', $year_id );
-//	    } )->get();
-
 	    $subjects     = $semester->subjects()->get();
 
-	    $employees        = auth()->user()->employee()->first()->departments()->first()->employees()->pluck('name', 'id')->toArray();
+	    $faculty_arr = User::whereHas( 'roles', function ( $q ) {
+		    $q->where( 'name', 'Faculty' );
+	    } )->with( 'employee' )->get()->pluck( 'employee.name', 'employee.id' )->toArray();
 
 	    session()->flash('success', "Courses submitted successfully.");
 
 	    return view( 'layouts.select-courses', compact( 'title', 'semesters_arr',
-		    'sections_arr', 'semester_id', 'section_id', 'subjects' , 'employees' ) );
+		    'sections_arr', 'semester_id', 'section_id', 'subjects' , 'faculty_arr' ) );
     }
 
     /**

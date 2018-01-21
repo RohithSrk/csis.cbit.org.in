@@ -48,9 +48,12 @@ class User extends Authenticatable
 		return $this->employee()->first()->departments()->first();
 	}
 
-	public function roles()
-	{
+	public function roles() {
 		return $this->belongsToMany(Role::class);
+	}
+
+	public function getDepartmentYearIdsArray(){
+		return $this->employee()->first()->departments()->first()->years()->pluck( 'id' )->toArray();
 	}
 
 	/**
