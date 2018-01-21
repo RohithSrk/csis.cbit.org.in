@@ -20,9 +20,7 @@
                                 <div class="panel-heading">
                                     <h4 class="panel-title">Select Students</h4>
                                 </div>
-                                <form class="form-horizontal" action="/students/view-lab-marks" method="post">
-
-                                    {{ csrf_field() }}
+                                {{ Form::open(array('action' => 'LabMarksController@viewLabMarks', 'method' => 'post')) }}
 
                                     <div class="panel-body admin-form">
 
@@ -30,7 +28,7 @@
                                             <div class="section">
                                                 <label for="select_subject" class="field-label">Select Course</label>
                                                 <label for="select_subject" class="field">
-                                                    {{  Form::select('subject', $subjects, isset($subject_id)? $subject_id : '' , [
+                                                    {{  Form::select('subject', $subjects, $subject_id ?? '' , [
                                                         'class' => 'form-control select',
                                                         'id' => 'select_subject' ]) }}
                                                 </label>
@@ -41,7 +39,7 @@
                                             <div class="section">
                                                 <label for="select_section" class="field-label">Select Section</label>
                                                 <label for="select_section" class="field">
-                                                    {{  Form::select('section',$sections, isset($section_id)? $section_id : '' , [
+                                                    {{  Form::select('section',$sections, $section_id ?? '' , [
                                                         'class' => 'form-control select',
                                                         'id' => 'select_section' ]) }}
                                                 </label>
@@ -51,7 +49,7 @@
                                             <div class="section">
                                                 <label for="select_batch" class="field-label">Select Batch</label>
                                                 <label for="select_batch" class="field">
-                                                    {{  Form::select('batch',$batches, isset($batch_id)? $batch_id : '' , [
+                                                    {{  Form::select('batch',$batches, $batch_id ?? '' , [
                                                         'class' => 'form-control select',
                                                         'id' => 'select_batch' ]) }}
                                                 </label>
@@ -62,7 +60,7 @@
                                     <div class="panel-footer admin-form" align="right">
                                         <input type="submit" class="btn btn-sm btn-primary" value="Get Students">
                                     </div>
-                                </form>
+                                {{ Form::close() }}
                             </div>
                         </div><!-- .col-lg-12 -->
                     </div><!-- .row -->
@@ -75,10 +73,6 @@
                                     <div class="panel-heading">
                                         <h4 class="panel-title">Average Student Lab Marks</h4>
                                     </div>
-                                    {{ Form::open(array('action' => 'LabMarksController@store', 'method' => 'put')) }}
-                                    {{ Form::hidden('subject', $subject_id) }}
-                                    {{ Form::hidden('batch', $batch_id) }}
-                                    {{ Form::hidden('section', $section_id) }}
 
                                     <div class="panel-body marks-table">
                                         <div class="table-responsive">
@@ -118,7 +112,6 @@
                                             </table>
                                         </div><!-- .table-responsive -->
                                     </div>
-                                    {{ Form::close() }}
                                 </div>
                             </div><!-- .col-lg-12 -->
                         </div><!-- .row -->
