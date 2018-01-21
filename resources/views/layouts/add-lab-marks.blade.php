@@ -67,7 +67,7 @@
                                                                 <td class="width-150">
                                                                 {{Form::number( 'marks[' . $student->rollnum . '][' . $mark_type['name'] . ']'  ,
                                                                   $stdLabMarks[ $mark_type['name'] ] ?? '',
-                                                                  array('min' => 0, 'max' => $mark_type['max_marks'], 'class' => 'form-control'))}}
+                                                                  array('min' => 0, 'max' => $mark_type['max_marks'], 'class' => 'form-control', 'required'))}}
                                                                 </td>
                                                             @endif
                                                         @endforeach

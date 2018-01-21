@@ -28,7 +28,7 @@
                                         <div class="section">
                                             <label for="select_subject" class="field-label">Select Course</label>
                                             <label for="select_subject" class="field">
-                                                {{  Form::select('subject', $subjects, isset($subject_id)? $subject_id : '' , [
+                                                {{  Form::select('subject', $subjects, $subject_id ?? '' , [
                                                     'class' => 'form-control select',
                                                     'id' => 'select_subject' ]) }}
                                             </label>
@@ -38,7 +38,7 @@
                                         <div class="section">
                                             <label for="rollnum" class="field-label">Roll Number</label>
                                             <label for="rollnum" class="field">
-                                                {{  Form::text('rollnum', isset($rollnum)? $rollnum : '', [
+                                                {{  Form::text('rollnum', $rollnum ?? '', [
                                                     'class' => 'form-control select',
                                                     'id' => 'rollnum' ]) }}
                                             </label>
@@ -48,7 +48,7 @@
                                         <div class="section">
                                             <label for="select_labweek2" class="field-label">Select Week</label>
                                             <label for="select_labweek2" class="field">
-                                                {{  Form::select('labweek',$lab_weeks, isset($lab_week_id)? $lab_week_id: '' , [
+                                                {{  Form::select('labweek',$lab_weeks, $lab_week_id ?? '' , [
                                                     'class' => 'form-control select',
                                                     'id' => 'select_labweek2' ]) }}
                                             </label>
@@ -61,9 +61,9 @@
                                         <label for="date" class="field-label hidden">Select Date</label>
                                         <label for="date" class="field">
                                             <div class="input-group date ">
-                                    <span class="input-group-addon cursor">
-                                        <i class="fa fa-calendar"></i>
-                                    </span>
+                                                <span class="input-group-addon cursor">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
                                                 <input type="text" id="date" name="date" value="{{ $date }}"
                                                        class="form-control gui-input datetimepicker" placeholder="dd/mm/yyyy" readonly>
                                             </div>
@@ -87,6 +87,7 @@
                                     {{ Form::hidden('date', $date) }}
                                     {{ Form::hidden('subject', $subject_id) }}
                                     {{ Form::hidden('labweek', $lab_week_id) }}
+                                    {{ Form::hidden('rollnum', $rollnum) }}
 
                                     <div class="panel-body marks-table">
                                         <div class="table-responsive">

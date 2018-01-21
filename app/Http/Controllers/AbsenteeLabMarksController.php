@@ -10,6 +10,7 @@ use App\LabMark;
 use App\LabReMark;
 use App\LabMarkType;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\App;
 
 class AbsenteeLabMarksController extends Controller
 {
@@ -18,72 +19,79 @@ class AbsenteeLabMarksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-	    auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal' ] );
-	    $title      = "Add Absentee Lab Marks";
-	    $subjects = auth()->user()->getAssignedLabSubjectsArray();
-	    $lab_weeks = LabWeek::pluck('label', 'id')->toArray();
-	    $date = date( 'd/m/Y' );
+	public function index() {
+		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
 
-	    if( ! (count( $subjects ) >= 1)){
-		    return view( 'layouts.add-absentee-lab-marks', compact('title') )->withErrors([ 'message' => 'No courses assigned for you.' ]);
-	    }
+		$title     = "Add Absentee Lab Marks";
+		$subjects  = auth()->user()->getAssignedLabSubjectsArray();
+		$lab_weeks = LabWeek::pluck( 'label', 'id' )->toArray();
+		$date      = date( 'd/m/Y' );
 
-	    return view( 'layouts.add-absentee-lab-marks', compact( 'title','subjects',
-		    'lab_weeks', 'date') );
-    }
+		if ( ! ( count( $subjects ) >= 1 ) ) {
+			return view( 'layouts.add-absentee-lab-marks', compact( 'title' ) )->withErrors( [ 'message' => 'No courses assigned for you.' ] );
+		}
+
+		return view( 'layouts.add-absentee-lab-marks', compact( 'title', 'subjects',
+			'lab_weeks', 'date' ) );
+	}
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-//        dd(\request()->all());
-	    $title      = "Add Absentee Lab Marks";
+	public function create() {
+		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
 
-	    $date = request( 'date' );
-	    $rollnum = request('rollnum');
-	    $subject_id = request('subject');
-	    $lab_week_id = request('labweek');
-	    $date_formatted = Carbon::createFromFormat('d/m/Y', $date)->format('Y-m-d');
+		$this->validate( request(), [
+			'date'    => 'required',
+			'rollnum' => 'required',
+			'subject' => 'required',
+			'labweek' => 'required'
+		] );
 
-	    $lab_weeks = LabWeek::pluck('label', 'id')->toArray();
+		$title = "Add Absentee Lab Marks";
 
+		$date           = request( 'date' );
+		$rollnum        = request( 'rollnum' );
+		$subject_id     = request( 'subject' );
+		$lab_week_id    = request( 'labweek' );
+		$date_formatted = Carbon::createFromFormat( 'd/m/Y', $date )->format( 'Y-m-d' );
 
-	    $subjects = auth()->user()->getAssignedLabSubjectsArray();
-	    $mark_types = Subject::find( $subject_id )->labMarkTypes()->get()->toArray();
+		$lab_weeks = LabWeek::pluck( 'label', 'id' )->toArray();
 
-	    $students = Student::where('rollnum', $rollnum)->get();
+		$subjects = auth()->user()->getAssignedLabSubjectsArray();
 
-	    $mark_type_names =Subject::find( 1 )->labMarkTypes()->pluck('name', 'id')->toArray();
+		$mark_types = Subject::find( $subject_id )->labMarkTypes()->get()->toArray();
 
-	    $subject_name = Subject::find( $subject_id )->name;
+		$students = Student::where( 'rollnum', $rollnum )->get();
 
-	    foreach ($mark_type_names as $mark_type_id => $mark_type_name){
-	    	if(strtolower($mark_type_name) == 'attendance'){
+		$mark_type_names = Subject::find( 1 )->labMarkTypes()->pluck( 'name', 'id' )->toArray();
 
+		$subject_name = Subject::find( $subject_id )->name;
 
-			    $absent = Student::where('rollnum', $rollnum)->first()->labMarks()
-			           ->where('mark_type_id', $mark_type_id)->where('date', $date_formatted)
-			           ->where('marks_scored', 0)->count();
+		foreach ( $mark_type_names as $mark_type_id => $mark_type_name ) {
 
-			    if($absent == 0){
-				    return view( 'layouts.add-absentee-lab-marks', compact( 'title','subjects',
-					    'subject_id', 'rollnum', 'date', 'date_formatted', 'mark_types', 'lab_weeks',
-					    'lab_week_id') )->withErrors([
-						    'message' => "{$rollnum} was not absent on {$date_formatted} for {$subject_name}"
-					    ]);
-			    }
+			if ( strtolower( $mark_type_name ) == 'attendance' ) {
 
-		    }
-	    }
+				$absent = Student::where( 'rollnum', $rollnum )->first()->labMarks()
+				                 ->where( 'mark_type_id', $mark_type_id )->where( 'date', $date_formatted )
+				                 ->where( 'marks_scored', 0 )->count();
 
-	    return view( 'layouts.add-absentee-lab-marks', compact( 'title','subjects',
-		    'subject_id', 'students', 'rollnum', 'date', 'date_formatted', 'mark_types', 'lab_weeks', 'lab_week_id') );
-    }
+				if ( $absent == 0 ) {
+					return view( 'layouts.add-absentee-lab-marks', compact( 'title', 'subjects',
+						'subject_id', 'rollnum', 'date', 'date_formatted', 'mark_types', 'lab_weeks',
+						'lab_week_id' ) )->withErrors( [
+						'message' => "{$rollnum} was not absent on {$date_formatted} for {$subject_name}"
+					] );
+				}
+
+			}
+		}
+
+		return view( 'layouts.add-absentee-lab-marks', compact( 'title', 'subjects',
+			'subject_id', 'students', 'rollnum', 'date', 'date_formatted', 'mark_types', 'lab_weeks', 'lab_week_id' ) );
+	}
 
     /**
      * Store a newly created resource in storage.
@@ -91,56 +99,74 @@ class AbsenteeLabMarksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-//		dd($request->all());
-	    $title      = "Add Absentee Lab Marks";
+	public function store( Request $request ) {
+		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
 
-	    $date           = request( 'date' );
-	    $rollnum        = request( 'rollnum' );
-	    $subject_id     = request( 'subject' );
-	    $lab_week_id    = request( 'labweek' );
-	    $marks          = request( 'marks' );
-	    $date_formatted = Carbon::createFromFormat( 'd/m/Y', $date )->format( 'Y-m-d' );
+		$this->validate( request(), [
+			'date'    => 'required',
+			'rollnum' => 'required',
+			'subject' => 'required',
+			'labweek' => 'required',
+			'marks'   => 'required'
+		] );
 
-	    $lab_weeks = LabWeek::pluck('label', 'id')->toArray();
+		$title = "Add Absentee Lab Marks";
 
-	    $subjects = auth()->user()->getAssignedLabSubjectsArray();
+		$date           = $request->get( 'date' );
+		$rollnum        = $request->get( 'rollnum' );
+		$subject_id     = $request->get( 'subject' );
+		$lab_week_id    = $request->get( 'labweek' );
+		$marks          = $request->get( 'marks' );
+		$date_formatted = Carbon::createFromFormat( 'd/m/Y', $date )->format( 'Y-m-d' );
+		$mark_types     = Subject::find( $subject_id )->labMarkTypes()->get()->toArray();
 
-	    foreach ( $marks as $roll_num => $mark_types ) {
+		$lab_weeks = LabWeek::pluck( 'label', 'id' )->toArray();
 
-		    foreach ( $mark_types as $mark_type_name => $value ) {
-			    if ( $value != null ) {
+		$subjects = auth()->user()->getAssignedLabSubjectsArray();
 
-				    $student = Student::where( 'rollnum', $roll_num )->first();
+		foreach ( $marks as $roll_num => $mark_types ) {
 
-				    if( $mark_type_name != 'remark' ){
-					    $mark_types = LabMarkType::where( 'name', $mark_type_name )->
-					    where( 'subject_id', $subject_id )->get()->first()->toArray();
-					    $lm = LabMark::where( 'mark_type_id', $mark_types['id'] )->
-					    where( 'date', $date_formatted )->where( 'student_id', $student->id )->first();
-					    $lm->marks_scored = $value;
-					    $lm->save();
-				    } else {
-					    $lr  = new LabRemark();
-					    $lr->student_id = $student->id;
-					    $lr->subject_id = $subject_id;
-					    $lr->description = $value;
-					    $lr->lab_week_id = $lab_week_id;
-					    $lr->date = Carbon::now();
-					    $lr->save();
-				    }
+			foreach ( $mark_types as $mark_type_name => $value ) {
 
-				    session()->flash( 'success', "Marks submitted successfully." );
-			    }
-		    }
-	    }
+				if ( $value != null ) {
 
-	    $mark_types = Subject::find( $subject_id )->labMarkTypes()->get()->toArray();
+					$student = Student::where( 'rollnum', $roll_num )->first();
 
-	    return view( 'layouts.add-absentee-lab-marks', compact( 'title','subjects',
-		    'subject_id', 'rollnum', 'date', 'date_formatted', 'mark_types', 'lab_weeks', 'lab_week_id') );
-    }
+					if ( $mark_type_name != 'remark' ) {
+						$mark_types       = LabMarkType::where( 'name', $mark_type_name )->
+						where( 'subject_id', $subject_id )->get()->first()->toArray();
+						$lm               = LabMark::where( 'mark_type_id', $mark_types['id'] )->
+						where( 'date', $date_formatted )->where( 'student_id', $student->id )->first();
+						$lm->marks_scored = $value;
+
+						if (  $lm->save()  ) {
+							session()->flash( 'success', "Marks submitted successfully." );
+						} else {
+							App::abort( 500, 'Error' );
+						}
+
+					} else {
+						$lr              = new LabRemark();
+						$lr->student_id  = $student->id;
+						$lr->subject_id  = $subject_id;
+						$lr->description = $value;
+						$lr->lab_week_id = $lab_week_id;
+						$lr->date        = Carbon::now();
+
+						if (  $lr->save()  ) {
+							session()->flash( 'success', "Marks submitted successfully." );
+						} else {
+							App::abort( 500, 'Error' );
+						}
+					}
+
+				}
+			}
+		}
+
+		return view( 'layouts.add-absentee-lab-marks', compact( 'title', 'subjects',
+			'subject_id', 'rollnum', 'date', 'date_formatted', 'mark_types', 'lab_weeks', 'lab_week_id' ) );
+	}
 
     /**
      * Display the specified resource.
