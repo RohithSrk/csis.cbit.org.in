@@ -1,4 +1,6 @@
 {
+  "name": "CBIT Faculty Info. System",
+  "version": "0.1",
   "private": true,
   "scripts": {
     "dev": "npm run development",

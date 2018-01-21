@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -10,24 +10,19 @@ class DashboardController extends Controller
 		$this->middleware('auth');
 	}
 
-    public function index(Request $request){
-
+    public function index(){
 	    $title      = "Dashboard - Home";
 
-	    $subjects_raw = auth()->user()->employee()->first()->subjects()->get()->toArray();
-//	    $subjects_raw = auth()->user()->employee()->first()->subjects()->with('sections.year')->distinct()->get()->toArray();
-	    $subjects = [];
+	    $subjects = DB::table('employee_subject')
+					      ->select(['employees.id as employee_id', 'sections.id as section_id', 'subjects.code', 'subjects.name'])
+					      ->leftJoin('employees', 'employees.id', '=', 'employee_subject.employee_id')
+					      ->leftJoin('subjects', 'subjects.id', '=', 'employee_subject.subject_id')
+					      ->leftJoin('sections', 'sections.id', '=', 'employee_subject.section_id')
+					      ->where('employees.id', auth()->user()->employee()->first()->id)->get();
 
-	    $i = 0;
-	    foreach ( $subjects_raw as $subject_raw ){
-
-		    $subjects[ ++$i ]['name'] = $subject_raw['name'];
-		    $subjects[ $i ]['code'] = $subject_raw['code'];
-
-//		    foreach ($subject_raw['sections'] as $subject_section){
-//			    $subjects[ $i ]['year_sec'] = $subject_section['year']['name'] . ' ' . $subject_section['name'];
-//		    }
-	    }
+	    $subjects = collect( $subjects )->map( function ( $x ) {
+		    return (array) $x;
+	    } )->toArray();
 
 	    return view( 'layouts.home', compact( 'title', 'subjects' ) );
     }

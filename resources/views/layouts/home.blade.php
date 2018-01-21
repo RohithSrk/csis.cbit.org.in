@@ -23,29 +23,29 @@
                                             <th>#</th>
                                             <th>Course Name</th>
                                             <th>Course Code</th>
-                                            {{--<td><b>Year &amp; Section</b></td>--}}
+                                            <th>Year/Section</th>
                                         </tr>
                                         </thead>
                                         <tbody id="lab-mark-types">
                                         @foreach( $subjects as $num => $subject )
                                             <tr>
-                                                <td class="width-50">{{ $num }}</td>
+                                                <td class="width-50">{{ $num+1 }}</td>
                                                 <td>{{ $subject['name'] }}</td>
                                                 <td>{{ $subject['code'] }}</td>
-{{--                                                <td>{{ $subject['year_sec'] }}</td>--}}
+                                                <td>{{ sectionGetYearSectionName( $subject['section_id'] ) }}</td>
                                             </tr>
                                         @endforeach
                                         </tbody>
-                                    </table>
-                                </div><!-- .table-responsive -->
+                                    </table><!-- .table-responsive -->
+                                </div>
                             </div>
                         </div><!--.panel-->
                     </div>
                     <div class="col-lg-4">
                         <div id="dashboard-calendar"></div>
                     </div>
-                </div>
+                </div><!-- .page-content -->
             </div>
-            </div>
+        </div><!-- .page-main -->
     </div>
 @endsection
