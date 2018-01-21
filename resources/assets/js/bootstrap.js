@@ -15,6 +15,7 @@ try {
     require('bootstrap-multiselect');
     require('chart.js');
     require('datatables.net');
+    require('./vendor/zabuto_calender');
 } catch (e) {}
 
 /**

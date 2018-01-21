@@ -19,6 +19,7 @@ mix.styles([
     'node_modules/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css',
     'node_modules/bootstrap-multiselect/dist/css/bootstrap-multiselect.css',
     'node_modules/datatables.net-dt/css/jquery.dataTables.css',
+    'resources/assets/css/vendor/zabuto_calender.css',
     'resources/assets/css/style.css',
 ], 'public/css/app.css');
 

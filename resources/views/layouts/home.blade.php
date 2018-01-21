@@ -35,6 +35,11 @@
                                                 <td>{{ sectionGetYearSectionName( $subject['section_id'] ) }}</td>
                                             </tr>
                                         @endforeach
+                                        @if( empty( $subjects ) )
+                                        <tr>
+                                            <td colspan="4" align="center" class="alert alert-danger">No courses assigned for you yet!</td>
+                                        </tr>
+                                        @endif
                                         </tbody>
                                     </table><!-- .table-responsive -->
                                 </div>
