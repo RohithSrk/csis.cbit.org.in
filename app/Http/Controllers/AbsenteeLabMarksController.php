@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 use App\Student;
 use App\Subject;
 use App\LabWeek;
-use Carbon\Carbon;
 use App\LabMark;
 use App\LabReMark;
 use App\LabMarkType;
+use Carbon\Carbon;
 
 class AbsenteeLabMarksController extends Controller
 {
@@ -70,7 +70,7 @@ class AbsenteeLabMarksController extends Controller
 			           ->where('mark_type_id', $mark_type_id)->where('date', $date_formatted)
 			           ->where('marks_scored', 0)->count();
 
-			    if($absent == 1){
+			    if($absent == 0){
 				    return view( 'layouts.add-absentee-lab-marks', compact( 'title','subjects',
 					    'subject_id', 'rollnum', 'date', 'date_formatted', 'mark_types', 'lab_weeks',
 					    'lab_week_id') )->withErrors([

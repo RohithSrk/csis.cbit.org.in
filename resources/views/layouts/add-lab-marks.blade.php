@@ -31,7 +31,6 @@
                                     {{ Form::hidden('section', $section_id) }}
                                     {{ Form::hidden('labweek', $lab_week_id) }}
 
-
                                     <div class="panel-body marks-table">
                                         <div class="table-responsive">
                                             <table class="table table-bordered mb-0 th-bb-n" id="student-lab-marks-entry">
@@ -60,14 +59,14 @@
                                                                     {{  Form::select('attendance', [ $mark_type['max_marks'] => 'Present', 0 => 'Absent' ],
                                                                         $stdLabMarks[ $mark_type['name'] ]?? $mark_type['max_marks'] ,
                                                                         ['class' => 'form-control attendance select' ]) }}
-                                                                    {{Form::number( 'marks[' . $student->rollnum . '][' . $mark_type['name'] . ']'  ,
-                                                                      (isset($stdLabMarks[ $mark_type['name'] ]))? $stdLabMarks[ $mark_type['name'] ] : '',
+                                                                    {{Form::number( 'marks[' . $student->rollnum . '][' . $mark_type['name'] . ']',
+                                                                      $mark_type['max_marks'],
                                                                       array('min' => 0, 'max' => $mark_type['max_marks'], 'class' => 'form-control hidden'))}}
                                                                 </td>
                                                             @else
                                                                 <td class="width-150">
                                                                 {{Form::number( 'marks[' . $student->rollnum . '][' . $mark_type['name'] . ']'  ,
-                                                                  (isset($stdLabMarks[ $mark_type['name'] ]))? $stdLabMarks[ $mark_type['name'] ] : '',
+                                                                  $stdLabMarks[ $mark_type['name'] ] ?? '',
                                                                   array('min' => 0, 'max' => $mark_type['max_marks'], 'class' => 'form-control'))}}
                                                                 </td>
                                                             @endif

@@ -14,7 +14,7 @@
                         <div class="section">
                             <label for="select_subject" class="field-label">Select Course</label>
                             <label for="select_subject" class="field">
-                                {{  Form::select('subject', $subjects, isset($subject_id)? $subject_id : '' , [
+                                {{  Form::select('subject', $subjects, $subject_id ?? '' , [
                                     'class' => 'form-control select',
                                     'id' => 'select_subject' ]) }}
                             </label>
@@ -25,7 +25,7 @@
                         <div class="section">
                             <label for="select_section" class="field-label">Select Section</label>
                             <label for="select_section" class="field">
-                                {{  Form::select('section',$sections, isset($section_id)? $section_id : '' , [
+                                {{  Form::select('section',$sections, $section_id ?? '' , [
                                     'class' => 'form-control select',
                                     'id' => 'select_section' ]) }}
                             </label>
@@ -35,7 +35,7 @@
                         <div class="section">
                             <label for="select_batch" class="field-label">Select Batch</label>
                             <label for="select_batch" class="field">
-                                {{  Form::select('batch',$batches, isset($batch_id)? $batch_id : '' , [
+                                {{  Form::select('batch',$batches, $batch_id ?? '' , [
                                     'class' => 'form-control select',
                                     'id' => 'select_batch' ]) }}
                             </label>
@@ -45,7 +45,7 @@
                         <div class="section">
                             <label for="select_labweek" class="field-label">Select Week</label>
                             <label for="select_labweek" class="field">
-                                {{  Form::select('lab_week',$lab_weeks, isset($lab_week_id)? $lab_week_id: '' , [
+                                {{  Form::select('lab_week',$lab_weeks, $lab_week_id ?? '' , [
                                     'class' => 'form-control select',
                                     'id' => 'select_labweek' ]) }}
                             </label>
