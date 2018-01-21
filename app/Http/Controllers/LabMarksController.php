@@ -23,7 +23,7 @@ class LabMarksController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function index() {
-		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
+		auth()->user()->authorizeRoles( [ 'Faculty' ] );
 
 		$title = "Add Lab Marks";
 
@@ -56,7 +56,7 @@ class LabMarksController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function create() {
-		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
+		auth()->user()->authorizeRoles( [ 'Faculty' ] );
 
 		$title = "Add Lab Marks";
 
@@ -101,7 +101,7 @@ class LabMarksController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function store( Request $request ) {
-		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
+		auth()->user()->authorizeRoles( [ 'Faculty' ] );
 
 		$this->validate( request(), [
 			'date'    => 'required',
@@ -169,7 +169,7 @@ class LabMarksController extends Controller
 	}
 
 	public function indexLabMarks() {
-		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
+		auth()->user()->authorizeRoles( [ 'Faculty' ] );
 
 		$title      = "View Lab Marks";
 
@@ -193,7 +193,7 @@ class LabMarksController extends Controller
 	}
 
 	public function viewLabMarks() {
-		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
+		auth()->user()->authorizeRoles( [ 'Faculty' ] );
 
 		$title = "View Lab Marks";
 

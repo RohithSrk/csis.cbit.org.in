@@ -20,9 +20,8 @@
                                 <div class="panel-heading">
                                     <h4 class="panel-title">Select a course to add/remove mark types.</h4>
                                 </div>
-                                {{ Form::open(array('action' => 'LabMarkTypesController@create', 'method' => 'post', 'class' => 'form-horizontal')) }}
-
-                                {{ csrf_field() }}
+                                {{ Form::open( array('action' => 'LabMarkTypesController@create', 'method' => 'post',
+                                    'class' => 'form-horizontal' ) ) }}
 
                                 <div class="panel-body admin-form">
 
@@ -30,7 +29,7 @@
                                         <div class="section">
                                             <label for="select_subject" class="field-label">Select Course</label>
                                             <label for="select_subject" class="field">
-                                                {{  Form::select('subject', $subjects, isset($subject_id)? $subject_id : '' , [
+                                                {{  Form::select('subject', $subjects, $subject_id ?? '' , [
                                                     'class' => 'form-control select',
                                                     'id' => 'select_subject' ]) }}
                                             </label>

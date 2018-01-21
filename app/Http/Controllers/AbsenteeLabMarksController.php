@@ -20,7 +20,7 @@ class AbsenteeLabMarksController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function index() {
-		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
+		auth()->user()->authorizeRoles( [ 'Faculty' ] );
 
 		$title     = "Add Absentee Lab Marks";
 		$subjects  = auth()->user()->getAssignedLabSubjectsArray();
@@ -41,7 +41,7 @@ class AbsenteeLabMarksController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function create() {
-		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
+		auth()->user()->authorizeRoles( [ 'Faculty' ] );
 
 		$this->validate( request(), [
 			'date'    => 'required',
@@ -100,7 +100,7 @@ class AbsenteeLabMarksController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function store( Request $request ) {
-		auth()->user()->authorizeRoles( [ 'Faculty', 'HOD', 'Principal', 'Editor' ] );
+		auth()->user()->authorizeRoles( [ 'Faculty' ] );
 
 		$this->validate( request(), [
 			'date'    => 'required',
