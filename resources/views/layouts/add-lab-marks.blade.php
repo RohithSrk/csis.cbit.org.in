@@ -34,7 +34,7 @@
 
                                     <div class="panel-body marks-table">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered mb-0 th-bb-n">
+                                            <table class="table table-bordered mb-0 th-bb-n" id="student-lab-marks-entry">
                                                 <thead>
                                                 <tr>
                                                     <th>Roll Number</th>
@@ -57,8 +57,9 @@
                                                         @foreach( $mark_types as $mark_type )
                                                             @if(strtolower($mark_type['name']) == 'attendance')
                                                                 <td class="width-150">
-                                                                    {{  Form::select('attendance', [ 2 => 'Present', 0 => 'Absent' ], $stdLabMarks[ $mark_type['name'] ]?? '' ,
-                                                                            ['class' => 'form-control select' ]) }}
+                                                                    {{  Form::select('attendance', [ $mark_type['max_marks'] => 'Present', 0 => 'Absent' ],
+                                                                        $stdLabMarks[ $mark_type['name'] ]?? $mark_type['max_marks'] ,
+                                                                        ['class' => 'form-control attendance select' ]) }}
                                                                     {{Form::number( 'marks[' . $student->rollnum . '][' . $mark_type['name'] . ']'  ,
                                                                       (isset($stdLabMarks[ $mark_type['name'] ]))? $stdLabMarks[ $mark_type['name'] ] : '',
                                                                       array('min' => 0, 'max' => $mark_type['max_marks'], 'class' => 'form-control hidden'))}}

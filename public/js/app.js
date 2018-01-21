@@ -98508,6 +98508,16 @@ __webpack_require__("./resources/assets/js/bootstrap.js");
         });
     }
 
+    function init_extras() {
+        $('#student-lab-marks-entry select.attendance').change(function (e) {
+            if ($(this).val() == 0) {
+                $(this).closest('tr').find('input').val(0);
+            } else {
+                $(this).next('input').val($(this).val());
+            }
+        });
+    }
+
     /* ---------------------------------------------
      Scripts Initialization
      --------------------------------------------- */
@@ -98535,6 +98545,7 @@ __webpack_require__("./resources/assets/js/bootstrap.js");
         init_manageLabMarkTypes();
         init_calenderWidget();
         init_dataTables();
+        init_extras();
     });
 
     $(window).resize(function () {});
