@@ -6,6 +6,7 @@
 
             @include ('partials.alerts')
 
+            @if( ! empty( $feedback_arr ) )
             <div class="page-header">
                 <h1 class="page-title ">Feedback Report</h1>
             </div><!-- .page-header -->
@@ -43,18 +44,6 @@
                                         </label>
                                     </div><!-- section -->
                                 </div><!-- col-md-4 -->
-
-                                {{--<div class="col-md-4">--}}
-                                    {{--<div class="section">--}}
-                                        {{--<label for="select_subject" class="field-label">Select Course</label>--}}
-                                        {{--<label for="select_subject" class="field">--}}
-                                            {{--{{  Form::select('subject', $subjects_arr, $subject_id ?? '' , [--}}
-                                                {{--'class' => 'form-control course-selector report select',--}}
-                                                {{--'id' => 'select_subject',--}}
-                                                {{--'multiple' => 'multiple']) }}--}}
-                                        {{--</label>--}}
-                                    {{--</div><!-- section -->--}}
-                                {{--</div><!-- col-md-4 -->--}}
 
                             </div><!-- .panel-body -->
 
@@ -114,6 +103,12 @@
                 @endif
 
             </div><!-- .page-content -->
+            @else
+                <div class="alert alert-danger mg-top-15 text-left">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    No feedback available. Please create a new feedback by clicking <a href="{{ action('FeedbackController@create') }}">here</a>
+                </div>
+            @endif
 
         </div>
     </div><!-- .page -->

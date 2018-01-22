@@ -26,6 +26,7 @@ class FeedbackDataController extends Controller
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index( Feedback $feedback ) {
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
 
 		$title = 'Add Feedback';
 
@@ -41,7 +42,7 @@ class FeedbackDataController extends Controller
 		$sections     = $semesters->first()->sections();
 		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
-		$faculty_arr = Subject::find($subjects->first()->id)->getAssignedFacultyNames($sections->first()->id);
+		$faculty_arr = Subject::find( $subjects->first()->id )->getAssignedFacultyNames( $sections->first()->id );
 
 		return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr',
 			'subjects_arr', 'sections_arr', 'faculty_arr' ) );
@@ -52,56 +53,57 @@ class FeedbackDataController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Feedback $feedback)
-    {
-	    $title = 'Add Feedback';
+	public function create( Feedback $feedback ) {
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
 
-	    $this->validate(request(), [
-		    'semester' => 'required',
-		    'subject' => 'required',
-		    'section' => 'required',
-		    'faculty' => 'required',
-	    ]);
+		$title = 'Add Feedback';
 
-	    $semester_id = request( 'semester' );
-	    $subject_id  = request( 'subject' );
-	    $section_id  = request( 'section' );
-	    $faculty_id  = request( 'faculty' );
+		$this->validate( request(), [
+			'semester' => 'required',
+			'subject'  => 'required',
+			'section'  => 'required',
+			'faculty'  => 'required',
+		] );
 
-	    $count = FeedbackDatum::where( 'feedback_id', $feedback->id )
-	                          ->where( 'employee_id', $faculty_id )
-	                          ->where( 'section_id', $section_id )
-	                          ->where( 'subject_id', $subject_id )
-	                          ->count();
+		$semester_id = request( 'semester' );
+		$subject_id  = request( 'subject' );
+		$section_id  = request( 'section' );
+		$faculty_id  = request( 'faculty' );
 
-	    if ( $count > 0 ) {
-		    return Redirect::action( 'FeedbackDataController@index', [ 'feedback' => $feedback->id ] )
-		                   ->withErrors( [ 'message' => "Feedback submitted already." ] );
-	    }
+		$count = FeedbackDatum::where( 'feedback_id', $feedback->id )
+		                      ->where( 'employee_id', $faculty_id )
+		                      ->where( 'section_id', $section_id )
+		                      ->where( 'subject_id', $subject_id )
+		                      ->count();
+
+		if ( $count > 0 ) {
+			return Redirect::action( 'FeedbackDataController@index', [ 'feedback' => $feedback->id ] )
+			               ->withErrors( [ 'message' => "Feedback submitted already." ] );
+		}
 
 
-	    $semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
+		$semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
 
-	    $semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
+		$semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
 
-	    $semester = Semester::find( $semester_id );
+		$semester = Semester::find( $semester_id );
 
-	    $subjects     = $semester->subjects();
-	    $subjects_arr = $subjects->select( 'id', DB::raw( "concat(name, ' (', code,')') as name_code" ) )
-	                             ->pluck( 'name_code', 'id' )->toArray();
+		$subjects     = $semester->subjects();
+		$subjects_arr = $subjects->select( 'id', DB::raw( "concat(name, ' (', code,')') as name_code" ) )
+		                         ->pluck( 'name_code', 'id' )->toArray();
 
-	    $sections     = $semester->sections();
-	    $sections_arr = $sections->pluck( 'name', 'id' )->toArray();
+		$sections     = $semester->sections();
+		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
-	    $faculty_arr = Subject::find( $subject_id )->getAssignedFacultyNames( $section_id );
+		$faculty_arr = Subject::find( $subject_id )->getAssignedFacultyNames( $section_id );
 
-	    $criteria = Criterion::all();
+		$criteria = Criterion::all();
 
-	    $year = $semester->year()->first();
+		$year = $semester->year()->first();
 
-	    return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr',
-		    'subjects_arr', 'sections_arr', 'faculty_arr', 'semester_id', 'subject_id', 'section_id', 'faculty_id', 'criteria', 'year' ) );
-    }
+		return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr',
+			'subjects_arr', 'sections_arr', 'faculty_arr', 'semester_id', 'subject_id', 'section_id', 'faculty_id', 'criteria', 'year' ) );
+	}
 
     /**
      * Store a newly created resource in storage.
@@ -109,89 +111,88 @@ class FeedbackDataController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-//	    dd(\request()->all());
+	public function store( Request $request ) {
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
 		$title = "Add Feedback";
 
-	    $this->validate(request(), [
-		    'semester' => 'required',
-		    'subject' => 'required',
-		    'section' => 'required',
-		    'faculty' => 'required',
-		    'feedback' => 'required',
-		    'feedback_data' => 'required',
-	    ]);
+		$this->validate( request(), [
+			'semester'      => 'required',
+			'subject'       => 'required',
+			'section'       => 'required',
+			'faculty'       => 'required',
+			'feedback'      => 'required',
+			'feedback_data' => 'required',
+		] );
 
-	    $semester_id = $request->get( 'semester' );
-	    $subject_id  = $request->get( 'subject' );
-	    $section_id  = $request->get( 'section' );
-	    $faculty_id  = $request->get( 'faculty' );
-	    $feedback_id = $request->get( 'feedback' );
-	    $fdbk_data   = $request->get( 'feedback_data' );
+		$semester_id = $request->get( 'semester' );
+		$subject_id  = $request->get( 'subject' );
+		$section_id  = $request->get( 'section' );
+		$faculty_id  = $request->get( 'faculty' );
+		$feedback_id = $request->get( 'feedback' );
+		$fdbk_data   = $request->get( 'feedback_data' );
 
-	    $feedback = Feedback::find($feedback_id);
+		$feedback = Feedback::find( $feedback_id );
 
-	    foreach ($fdbk_data as $fdbk_datum){
+		foreach ( $fdbk_data as $fdbk_datum ) {
 
-	    	if( ! empty( $fdbk_datum['rollnum'] )){
+			if ( ! empty( $fdbk_datum['rollnum'] ) ) {
 
-	    		$student = Student::where('rollnum', $fdbk_datum['rollnum'])->first();
+				$student = Student::where( 'rollnum', $fdbk_datum['rollnum'] )->first();
 
-	    		//TODO: check if student belongs to section_id
-	    		//TODO: check if already submitted
+				//TODO: check if student belongs to section_id
+				//TODO: check if already submitted
 
-			    if(! empty( $student )){
+				if ( ! empty( $student ) ) {
 
-			        $feedback_datum = FeedbackDatum::where('feedback_id', $feedback_id)
-				                                   ->where('student_id', $student->id)
-				                                   ->where('employee_id', $faculty_id)
-				                                   ->where('section_id', $section_id)
-				                                   ->where('subject_id', $subject_id)
-				                                   ->first();
+					$feedback_datum = FeedbackDatum::where( 'feedback_id', $feedback_id )
+					                               ->where( 'student_id', $student->id )
+					                               ->where( 'employee_id', $faculty_id )
+					                               ->where( 'section_id', $section_id )
+					                               ->where( 'subject_id', $subject_id )
+					                               ->first();
 
-				    if ( empty( $feedback_datum ) ) {
-					    $feedback_datum              = new FeedbackDatum();
-					    $feedback_datum->feedback_id = $feedback_id;
-					    $feedback_datum->student_id  = $student->id;
-					    $feedback_datum->section_id  = $section_id;
-					    $feedback_datum->subject_id  = $subject_id;
-					    $feedback_datum->employee_id = $faculty_id;
-				    }
+					if ( empty( $feedback_datum ) ) {
+						$feedback_datum              = new FeedbackDatum();
+						$feedback_datum->feedback_id = $feedback_id;
+						$feedback_datum->student_id  = $student->id;
+						$feedback_datum->section_id  = $section_id;
+						$feedback_datum->subject_id  = $subject_id;
+						$feedback_datum->employee_id = $faculty_id;
+					}
 
-				    $feedback_datum->X1          = $fdbk_datum['X1'];
-				    $feedback_datum->X2          = $fdbk_datum['X2'];
-				    $feedback_datum->X3          = $fdbk_datum['X3'];
-				    $feedback_datum->X4          = $fdbk_datum['X4'];
-				    $feedback_datum->X4          = $fdbk_datum['X4'];
-				    $feedback_datum->percentage = ((($feedback_datum->X1 + $feedback_datum->X2 + $feedback_datum->X3 + $feedback_datum->X4) / 4) / 5) * 100;
-				    $feedback_datum->save();
+					$feedback_datum->X1         = $fdbk_datum['X1'];
+					$feedback_datum->X2         = $fdbk_datum['X2'];
+					$feedback_datum->X3         = $fdbk_datum['X3'];
+					$feedback_datum->X4         = $fdbk_datum['X4'];
+					$feedback_datum->X4         = $fdbk_datum['X4'];
+					$feedback_datum->percentage = ( ( ( $feedback_datum->X1 + $feedback_datum->X2 + $feedback_datum->X3 + $feedback_datum->X4 ) / 4 ) / 5 ) * 100;
+					$feedback_datum->save();
 
-				    session()->flash( 'success', "Feedback submitted successfully." );
-			    }
-		    }
-	    }
+					session()->flash( 'success', "Feedback submitted successfully." );
+				}
+			}
+		}
 
 
-	    $semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
+		$semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
 
-	    $semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
+		$semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
 
-	    $semester = Semester::find($semester_id);
-	    $subjects = $semester->subjects();
-	    $subjects_arr = $subjects->select( 'id', DB::raw( "concat(name, ' (', code,')') as name_code" ) )
-	                             ->pluck( 'name_code', 'id' )->toArray();
+		$semester     = Semester::find( $semester_id );
+		$subjects     = $semester->subjects();
+		$subjects_arr = $subjects->select( 'id', DB::raw( "concat(name, ' (', code,')') as name_code" ) )
+		                         ->pluck( 'name_code', 'id' )->toArray();
 
-	    $sections     = $semester->sections();
-	    $sections_arr = $sections->pluck( 'name', 'id' )->toArray();
+		$sections     = $semester->sections();
+		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
-	    $faculty_arr = Subject::find($subject_id)->getAssignedFacultyNames($section_id);
+		$faculty_arr = Subject::find( $subject_id )->getAssignedFacultyNames( $section_id );
 
-	    $year = $semester->year()->first();
+		$year = $semester->year()->first();
 
-	    return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr',
-		    'subjects_arr', 'sections_arr', 'faculty_arr', 'semester_id', 'subject_id', 'section_id', 'faculty_id', 'year' ) );
-    }
+		return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr',
+			'subjects_arr', 'sections_arr', 'faculty_arr', 'semester_id', 'subject_id', 'section_id', 'faculty_id', 'year' ) );
+	}
 
     /**
      * Display the specified resource.

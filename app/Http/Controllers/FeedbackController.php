@@ -26,28 +26,30 @@ class FeedbackController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-    	$title      = "Available Feedback";
+	public function index() {
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
+
+		$title = "Available Feedback";
 
 		$feedback_items = Feedback::all();
 
-	    return view( 'layouts.list-feedback', compact( 'title', 'feedback_items' ) );
-    }
+		return view( 'layouts.list-feedback', compact( 'title', 'feedback_items' ) );
+	}
 
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-	    $title      = "Create Feedback";
-	    $start_date = Carbon::now()->format('d/m/Y');
-	    $end_date = Carbon::now()->addMonths(3)->format('d/m/Y');
+	public function create() {
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
 
-	    return view( 'layouts.create-feedback', compact( 'title', 'start_date', 'end_date' ) );
-    }
+		$title      = "Create Feedback";
+		$start_date = Carbon::now()->format( 'd/m/Y' );
+		$end_date   = Carbon::now()->addMonths( 3 )->format( 'd/m/Y' );
+
+		return view( 'layouts.create-feedback', compact( 'title', 'start_date', 'end_date' ) );
+	}
 
     /**
      * Store a newly created resource in storage.
@@ -55,26 +57,26 @@ class FeedbackController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-	    $title      = "Create Feedback";
+	public function store( Request $request ) {
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
+		$title = "Create Feedback";
 
-        $start_date = $request->get('start-date');
-        $end_date = $request->get('end-date');
+		$start_date = $request->get( 'start-date' );
+		$end_date   = $request->get( 'end-date' );
 
-        $feedback = new Feedback();
-        $feedback->name = $request->get('feedback-name');
-        $feedback->start_date = Carbon::createFromFormat('d/m/Y', $start_date);
-        $feedback->end_date = Carbon::createFromFormat('d/m/Y', $end_date);
-        $feedback->save();
+		$feedback             = new Feedback();
+		$feedback->name       = $request->get( 'feedback-name' );
+		$feedback->start_date = Carbon::createFromFormat( 'd/m/Y', $start_date );
+		$feedback->end_date   = Carbon::createFromFormat( 'd/m/Y', $end_date );
+		$feedback->save();
 
-	    $start_date = Carbon::now()->format('d/m/Y');
-	    $end_date = Carbon::now()->addMonths(3)->format('d/m/Y');
+		$start_date = Carbon::now()->format( 'd/m/Y' );
+		$end_date   = Carbon::now()->addMonths( 3 )->format( 'd/m/Y' );
 
-	    session()->flash('success', 'Feedback created successfully.');
+		session()->flash( 'success', 'Feedback created successfully.' );
 
-	    return view( 'layouts.create-feedback', compact( 'title', 'start_date', 'end_date' ) );
-    }
+		return view( 'layouts.create-feedback', compact( 'title', 'start_date', 'end_date' ) );
+	}
 
     /**
      * Display the specified resource.
@@ -111,6 +113,8 @@ class FeedbackController extends Controller
     }
 
     public function viewResult(){
+	    auth()->user()->authorizeRoles( [ 'Faculty' ] );
+
     	$title = "View Feedback";
 
     	// TODO: create flat colors generation function
@@ -183,14 +187,14 @@ class FeedbackController extends Controller
     }
 
     public function selectFeedback(){
+	    auth()->user()->authorizeRoles( [ 'Editor', 'HOD', 'Principal' ] );
+
     	$title = "Feedback Report";
 
 	    $feedback_arr = Feedback::all()->pluck('name', 'id')->toArray();
 
 	    $faculty_arr = User::whereHas('roles', function($q){ $q->where('name', 'Faculty'); })
 	                       ->with('employee')->get()->pluck('employee.name', 'employee.id')->toArray();
-
-//	    User::whereHas('roles', function($q){ $q->where('name', 'Faculty'); })->first()->employee()->first();
 
 	    $subjects_arr = User::whereHas('roles', function($q){ $q->where('name', 'Faculty'); })
 	                        ->first()->employee()->first()->subjects()
@@ -201,43 +205,42 @@ class FeedbackController extends Controller
 		    'faculty_arr', 'subjects_arr') );
     }
 
-    public function viewReport(){
-	    $title = "Feedback Report";
+	public function viewReport() {
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD', 'Principal' ] );
 
-//	    dd(\request()->all());
+		$title = "Feedback Report";
 
-	    $facutly_ids = request()->get( 'faculty' );
-	    $feedback_id = request()->get( 'feedback' );
+		$this->validate( request(), [
+			'faculty' => 'required',
+		] );
 
-	    //TODO: minimum 1 faculty should be selected.
+		$facutly_ids = request()->get( 'faculty' );
+		$feedback_id = request()->get( 'feedback' );
 
-	    $feedback_arr = Feedback::all()->pluck('name', 'id')->toArray();
+		$feedback_arr = Feedback::all()->pluck( 'name', 'id' )->toArray();
 
-	    $faculty_arr = User::whereHas('roles', function($q){ $q->where('name', 'Faculty'); })
-	                       ->with('employee')->get()->pluck('employee.name', 'employee.id')->toArray();
+		$faculty_arr = User::whereHas( 'roles', function ( $q ) {
+			$q->where( 'name', 'Faculty' );
+		} )->with( 'employee' )->get()->pluck( 'employee.name', 'employee.id' )->toArray();
 
-	    $feedback_data = DB::table( 'feedback_data' )
-	                       ->where( 'feedback_id', $feedback_id )
-	                       ->whereIn( 'employee_id', $facutly_ids )
-	                       ->select( DB::raw( 'avg(percentage) as percentage, avg(X1) as X1, avg(X2) as X2, avg(X3) as X3, avg(X4) as X4, subject_id, section_id, employee_id' ) )
-	                       ->groupBy( 'subject_id', 'section_id', 'employee_id' )->get()->toArray();
+		$feedback_data = DB::table( 'feedback_data' )
+		                   ->where( 'feedback_id', $feedback_id )
+		                   ->whereIn( 'employee_id', $facutly_ids )
+		                   ->select( DB::raw( 'avg(percentage) as percentage, avg(X1) as X1, avg(X2) as X2, avg(X3) as X3, avg(X4) as X4, subject_id, section_id, employee_id' ) )
+		                   ->groupBy( 'subject_id', 'section_id', 'employee_id' )->get()->toArray();
 
-	    $feedback_data = collect( $feedback_data )->map( function ( $x ) {
-		    return (array) $x;
-	    } )->toArray();
+		$feedback_data = collect( $feedback_data )->map( function ( $x ) {
+			return (array) $x;
+		} )->toArray();
 
-	    $employees_arr = Employee::all()->pluck('name', 'id')->toArray();
-	    $subjects_arr = Subject::all()->pluck('name', 'id')->toArray();
-//	    $year    = $section->semester()->first()->year()->first();
+		$employees_arr = Employee::all()->pluck( 'name', 'id' )->toArray();
+		$subjects_arr  = Subject::all()->pluck( 'name', 'id' )->toArray();
 
-//
-//	    dd($feedback_data);
-
-	    $criteria = Criterion::all();
+		$criteria = Criterion::all();
 
 		return view( 'layouts.view-feedback-report', compact( 'title', 'feedback_arr', 'feedback_id',
 			'faculty_arr', 'facutly_ids', 'criteria', 'feedback_data', 'subjects_arr', 'employees_arr' ) );
-    }
+	}
 
     /**
      * Remove the specified resource from storage.
@@ -245,12 +248,15 @@ class FeedbackController extends Controller
      * @param  \App\Feedback  $feedback
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Feedback $feedback)
-    {
-	    FeedbackDatum::where( 'feedback_id', $feedback->id )->delete();
-	    $feedback->delete();
-	    session()->flash( 'success', 'Feedback deleted successfully.' );
+	public function destroy( Feedback $feedback ) {
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
 
-	    return Redirect::action( 'FeedbackController@index' );
-    }
+		FeedbackDatum::where( 'feedback_id', $feedback->id )->delete();
+
+		if( $feedback->delete() ){
+			session()->flash( 'success', 'Feedback deleted successfully.' );
+		}
+
+		return Redirect::action( 'FeedbackController@index' );
+	}
 }
