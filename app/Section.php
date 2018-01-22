@@ -10,17 +10,13 @@ class Section extends Model
     	return $this->hasMany(Batch::class);
     }
 
-    public function year(){
+//    public function year(){
 //    	return $this->belongsTo(Year::class);
-    }
+//    }
 
     public function semester(){
     	return $this->belongsTo(Semester::class);
     }
-
-//    public function subjects(){
-//    	return $this->belongsToMany( Subject::class, 'employee_subject');
-//    }
 
 	public static function getYearSectionName( $section_id ){
 

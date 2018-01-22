@@ -42,7 +42,7 @@ class FeedbackController extends Controller
      * @return \Illuminate\Http\Response
      */
 	public function create() {
-		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
+		auth()->user()->authorizeRoles( [ 'Editor', 'HOD', 'Principal' ] );
 
 		$title      = "Create Feedback";
 		$start_date = Carbon::now()->format( 'd/m/Y' );

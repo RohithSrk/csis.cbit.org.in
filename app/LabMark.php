@@ -12,10 +12,6 @@ class LabMark extends Model
     	return $this->belongsTo(Student::class);
     }
 
-//    public function subject(){
-//    	return $this->HasManyThrough( LabMarkType::class, Subject::class);
-//    }
-
     public function markType(){
     	return $this->belongsTo( LabMarkType::class);
     }

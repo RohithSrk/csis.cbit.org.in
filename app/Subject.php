@@ -20,10 +20,6 @@ class Subject extends Model {
 		return $this->hasMany( LabMarkType::class );
 	}
 
-	public function curriculum() {
-		return $this->belongsTo( Curriculum::class, 'curriculum_id' );
-	}
-
 	public function sections() {
 		return $this->belongsToMany( Section::class, 'employee_subject' );
 	}
