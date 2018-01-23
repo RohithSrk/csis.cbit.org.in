@@ -26,6 +26,7 @@
   "dependencies": {
     "chart.js": "^2.7.1",
     "datatables.net": "^1.10.16",
-    "datatables.net-dt": "^1.10.16"
+    "datatables.net-dt": "^1.10.16",
+    "jquery.scrollbar": "github:gromo/jquery.scrollbar"
   }
 }

@@ -410,3 +410,54 @@ table.th-bb-n thead tr:first-child td {
 .multiselect-container.dropdown-menu {
     margin-left: -100px;
 }
+
+/* site logo */
+
+#site-navbar .header {
+    height: 200px;
+    padding: 12px;
+}
+
+#sidebar {
+    top: 200px;
+    height: calc(100% - 200px);
+    /*overflow: scroll;*/
+}
+
+.menu-collapsed #site-navbar .logo-text {
+    display: none !important;
+}
+
+.menu-collapsed #site-navbar img {
+    width: 30px;
+}
+
+.menu-collapsed #site-navbar .header {
+    height: 60px;
+    padding: 0;
+}
+
+.menu-collapsed #sidebar {
+    top: 60px;
+    height: calc(100% - 60px);
+}
+
+#site-navbar .header {
+    /*background-color: #192b3e;*/
+}
+
+.dataTables_length {
+    display: none;
+}
+
+#feedback-report_filter {
+    display: none;
+}
+
+.dataTables_info{
+    display: none;
+}
+
+.dataTables_paginate.paging_simple_numbers {
+    display: none;
+}

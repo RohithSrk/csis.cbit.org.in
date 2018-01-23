@@ -47,7 +47,7 @@
                                                 @foreach( $students as $student )
                                                     <tr>
                                                         <td class="width-150">{{ $student->rollnum }}</td>
-                                                        <td>{{ $student->name }}</td>
+                                                        <td>{{ strtoupper($student->name) }}</td>
 
                                                         @php
                                                             $stdLabMarks = $student->getLabMarks( $subject_id, $date_formatted );

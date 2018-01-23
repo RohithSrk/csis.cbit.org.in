@@ -22,10 +22,8 @@
 <div id="site-navbar">
     <div class="header">
         <div class="logo font-1">
-            @if( ! empty( $icon_class ) && ! auth()->user()->isBelongsToMultipleDeps() )
-                <span class="logo-icon"><i class="fa {{ $icon_class }}" aria-hidden="true"></i></span>
-            @endif
-            <span class="logo-text">{{ $logoText }}</span>
+            <img src="{{asset('images/logo.png')}}" width="100" alt="CBIT Logo">
+            <span class="logo-text" style="display: inline-block">CBIT Faculty Info. System</span>
         </div><!-- .logo -->
     </div><!-- .header -->
     <div class="navbar-container container-fluid clearfix">
@@ -38,8 +36,8 @@
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-caret-down"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a href="#"><span class="fa fa-user-circle-o"></span> Profile Settings</a></li>
-                    <li><a href="#"><span class="fa fa-cog"></span> Reset Password</a></li>
+                    <li class="disabled"><a href="#"><span class="fa fa-user-circle-o"></span> Profile Settings</a></li>
+                    <li class="disabled"><a href="#"><span class="fa fa-cog"></span> Reset Password</a></li>
                     <li class="divider" role="separator"></li>
                     <li><a href="{{ URL::to('logout') }}" id="logout"><span class="fa fa-power-off"></span>Logout</a></li>
                 </ul>

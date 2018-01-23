@@ -1,6 +1,6 @@
 <aside id="sidebar">
 
-    <ul class="nav">
+    <ul class="nav navigation">
         <li class="menu-item {{ empty( request()->segment(1) )? 'active' : '' }}">
             <a href="/"><i class="fa fa-home"></i><span class="menu-title">Home</span></a>
         </li>
@@ -31,7 +31,6 @@
             <a href="{{ action('FeedbackController@create') }}"><i class="fa fa-comment-o"></i><span class="menu-title">Create Feedback</span></a>
         </li>
         @endif
-        @if(auth()->user()->hasAnyRole(['HOD', 'Editor']))
         @if(auth()->user()->hasAnyRole(['Faculty']))
             <li class="menu-item {{ (request()->is('feedback/view')) ? 'active' : '' }}">
                 <a href="{{ action('FeedbackController@viewResult') }}"><i class="fa fa-area-chart"></i><span
@@ -59,7 +58,7 @@
         <li class="menu-item hidden">
             <a href="{{ URL::to('logout') }}"><i class="fa fa-sign-out"></i><span class="menu-title">Logout</span></a>
         </li>
-        <li class="menu-item">
+        <li class="menu-item hidden">
             <a href="#"><i class="fa fa-info-circle"></i><span class="menu-title">About</span></a>
         </li>
     </ul>

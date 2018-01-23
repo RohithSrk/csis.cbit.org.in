@@ -57,116 +57,168 @@ require('./bootstrap');
             select_faculty = $('#select_faculty'),
             date = $('#date');
 
-        select_subject.change(function(e){
-            var subjectId = $(this).val(),
-                sectionId = select_section.val();
 
-            if( /students\/add-lab-marks/.test(window.location.href) ){
-                $.get( '/subjects/'+ subjectId +'/get-sections', function(data){
+        if( /feedback-data\/\d+\/add/.test(window.location.href) ){
+
+            select_semester.change(function(e){
+                var semesterId = $(this).val();
+
+                $.get( '/semesters/'+ semesterId +'/get-subjects', function(data){
+                    select_subject.empty();
+                    $.each(data, function() {
+                        select_subject.append('<option value="' + this.id + '">' + this.name + ' (' + this.code + ') </option>');
+                    });
+                    select_subject.trigger('change');
+                });
+
+                $.get( '/semesters/'+ semesterId +'/get-sections', function(data){
                     select_section.empty();
                     $.each(data, function() {
                         select_section.append('<option value="' + this.id + '">' + this.name + '</option>');
                     });
                     select_section.trigger('change');
                 });
-            }
 
-            $.get( '/sections/'+ sectionId +'/subjects/'+ subjectId +'/get-faculty', function(data){
-                select_faculty.empty();
-                $.each(data, function(k, v) {
-                    select_faculty.append('<option value="' + k + '">' + v + '</option>');
-                });
-                select_faculty.trigger('change');
             });
-        });
 
-        select_section.change(function(e){
-            var sectionId = $(this).val(),
-                subjectId = select_subject.val();
+            select_subject.change(function(e){
+                var subjectId = $(this).val(),
+                    sectionId = select_section.val();
 
-            $.get( '/sections/'+ sectionId +'/get-batches', function(data){
-                select_batch.empty();
-                $.each(data, function() {
-                    select_batch.append('<option value="' + this.id + '">' + this.name + '</option>');
+                $.get( '/sections/'+ sectionId +'/subjects/'+ subjectId +'/get-faculty', function(data){
+                    select_faculty.empty();
+                    $.each(data, function(k, v) {
+                        select_faculty.append('<option value="' + k + '">' + v + '</option>');
+                    });
+                    select_faculty.trigger('change');
                 });
             });
 
-            $.get( '/sections/'+ sectionId +'/subjects/'+ subjectId +'/get-faculty', function(data){
-                select_faculty.empty();
-                $.each(data, function(k, v) {
-                    select_faculty.append('<option value="' + k + '">' + v + '</option>');
+            select_section.change(function(e){
+                var sectionId = $(this).val(),
+                    subjectId = select_subject.val();
+
+                $.get( '/sections/'+ sectionId +'/subjects/'+ subjectId +'/get-faculty', function(data){
+                    select_faculty.empty();
+                    $.each(data, function(k, v) {
+                        select_faculty.append('<option value="' + k + '">' + v + '</option>');
+                    });
+                    select_faculty.trigger('change');
                 });
-                select_faculty.trigger('change');
+
             });
 
-        });
+        } else {
 
-        select_faculty.change(function(e){
-            var facultyId = $(this).val();
+            select_subject.change(function(e){
+                var subjectId = $(this).val(),
+                    sectionId = select_section.val();
 
-            $.get( '/faculty/'+ facultyId +'/get-subjects', function(data){
-                select_subject.empty();
-                $.each(data, function() {
-                    select_subject.append('<option value="' + this.id + '">' + this.name + ' (' + this.code + ') </option>');
+                if( /students\/add-lab-marks/.test(window.location.href) ){
+                    $.get( '/subjects/'+ subjectId +'/get-sections', function(data){
+                        select_section.empty();
+                        $.each(data, function() {
+                            select_section.append('<option value="' + this.id + '">' + this.name + '</option>');
+                        });
+                        select_section.trigger('change');
+                    });
+                }
+
+                $.get( '/sections/'+ sectionId +'/subjects/'+ subjectId +'/get-faculty', function(data){
+                    select_faculty.empty();
+                    $.each(data, function(k, v) {
+                        select_faculty.append('<option value="' + k + '">' + v + '</option>');
+                    });
+                    select_faculty.trigger('change');
                 });
-                select_subject.trigger('change');
             });
-        });
 
-        select_batch.change(function(e){
-           select_labweek.trigger('change');
-        });
+            select_section.change(function(e){
+                var sectionId = $(this).val(),
+                    subjectId = select_subject.val();
 
-        select_labweek.change(function(e){
-            var labWeekId = $(this).val(),
-                batchId = select_batch.val(),
-                subjectId = select_subject.val();
+                $.get( '/sections/'+ sectionId +'/get-batches', function(data){
+                    select_batch.empty();
+                    $.each(data, function() {
+                        select_batch.append('<option value="' + this.id + '">' + this.name + '</option>');
+                    });
+                });
 
-            $.get( '/subjects/'+ subjectId +'/batches/'+ batchId +'/labweek/'+ labWeekId +'/get-date', function(data){
-                date.val( JSON.parse(data).date );
+                $.get( '/sections/'+ sectionId +'/subjects/'+ subjectId +'/get-faculty', function(data){
+                    select_faculty.empty();
+                    $.each(data, function(k, v) {
+                        select_faculty.append('<option value="' + k + '">' + v + '</option>');
+                    });
+                    select_faculty.trigger('change');
+                });
+
             });
-        });
 
-        $('#rollnum').change(function(e){
-            $('#select_labweek2').trigger('change');
-        });
+            select_faculty.change(function(e){
+                var facultyId = $(this).val();
 
-        $('#select_labweek2').change(function(e){
-            var rollnum = $('#rollnum').val(),
-                labWeekId = $(this).val(),
-                subjectId = select_subject.val();
+                $.get( '/faculty/'+ facultyId +'/get-subjects', function(data){
+                    select_subject.empty();
+                    $.each(data, function() {
+                        select_subject.append('<option value="' + this.id + '">' + this.name + ' (' + this.code + ') </option>');
+                    });
+                    select_subject.trigger('change');
+                });
+            });
 
-            $.get( '/students/'+ rollnum +'/get-batch-id', function(data){
-                var batchId = JSON.parse(data).batch_id;
+            select_batch.change(function(e){
+                select_labweek.trigger('change');
+            });
+
+            select_labweek.change(function(e){
+                var labWeekId = $(this).val(),
+                    batchId = select_batch.val(),
+                    subjectId = select_subject.val();
 
                 $.get( '/subjects/'+ subjectId +'/batches/'+ batchId +'/labweek/'+ labWeekId +'/get-date', function(data){
                     date.val( JSON.parse(data).date );
                 });
             });
-        });
 
-        select_semester.change(function(e){
-            var semesterId = $(this).val();
-
-            $.get( '/semesters/'+ semesterId +'/get-subjects', function(data){
-                select_subject.empty();
-                $.each(data, function() {
-                    select_subject.append('<option value="' + this.id + '">' + this.name + ' (' + this.code + ') </option>');
-                });
-                select_subject.trigger('change');
+            $('#rollnum').change(function(e){
+                $('#select_labweek2').trigger('change');
             });
 
-            $.get( '/semesters/'+ semesterId +'/get-sections', function(data){
-                select_section.empty();
-                $.each(data, function() {
-                    select_section.append('<option value="' + this.id + '">' + this.name + '</option>');
+            $('#select_labweek2').change(function(e){
+                var rollnum = $('#rollnum').val(),
+                    labWeekId = $(this).val(),
+                    subjectId = select_subject.val();
+
+                $.get( '/students/'+ rollnum +'/get-batch-id', function(data){
+                    var batchId = JSON.parse(data).batch_id;
+
+                    $.get( '/subjects/'+ subjectId +'/batches/'+ batchId +'/labweek/'+ labWeekId +'/get-date', function(data){
+                        date.val( JSON.parse(data).date );
+                    });
                 });
-                select_section.trigger('change');
             });
 
-        });
+            select_semester.change(function(e){
+                var semesterId = $(this).val();
 
+                $.get( '/semesters/'+ semesterId +'/get-subjects', function(data){
+                    select_subject.empty();
+                    $.each(data, function() {
+                        select_subject.append('<option value="' + this.id + '">' + this.name + ' (' + this.code + ') </option>');
+                    });
+                    select_subject.trigger('change');
+                });
 
+                $.get( '/semesters/'+ semesterId +'/get-sections', function(data){
+                    select_section.empty();
+                    $.each(data, function() {
+                        select_section.append('<option value="' + this.id + '">' + this.name + '</option>');
+                    });
+                    select_section.trigger('change');
+                });
+
+            });
+        }
     }
 
     function init_multiselect(){
@@ -252,7 +304,7 @@ require('./bootstrap');
             var feedbackId = $(this).data('feedback-id');
 
             new Chart(this.getContext('2d'), {
-                type : 'horizontalBar',
+                type : 'bar',
                 data: {
                     labels: chartjsFacultyDSLabels,
                     datasets: chartjsFacultyDatasets[ feedbackId ]
@@ -319,6 +371,8 @@ require('./bootstrap');
 
     $(document).ready(function () {
         $(window).trigger('resize');
+
+        // $('#sidebar .nav.navigation').scrollbar();
 
         init_mainMenu();
         init_datepickers();

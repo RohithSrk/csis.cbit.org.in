@@ -3,6 +3,7 @@
 @section ( 'page-content' )
     <div class="page">
         <div class="page-main">
+            @if( $feedback_items->count() )
             <div class="page-header">
                 <h1 class="page-title ">Feedback</h1>
             </div>
@@ -25,6 +26,12 @@
                 </div>
                 @endforeach
             </div>
+            @else
+                <div class="alert alert-danger mg-top-15 text-left">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    <strong>Error:</strong> No feedback available.
+                </div>
+            @endif
         </div>
     </div>
 @endsection
