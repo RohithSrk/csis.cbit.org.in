@@ -13533,8 +13533,11 @@ h3 {
     padding: 20px 30px;
 }
 
-.page-main .alert {
+.page-main > .alert {
     margin: 30px 30px 0;
+}
+
+.page-main .alert {
     border-radius: 0;
 }
 
@@ -13749,4 +13752,10 @@ table.th-bb-n thead tr:first-child td {
 
 .dataTables_paginate.paging_simple_numbers {
     display: none;
+}
+
+@media only screen and (max-height: 650px)  {
+    #sidebar {
+        overflow: scroll;
+    }
 }

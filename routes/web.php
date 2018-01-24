@@ -70,6 +70,7 @@ Route::get( '/years/{year}/get-sections', 'AjaxController@getYearSections' );
 Route::get( '/subjects/{subject}/batches/{batch}/labweek/{labWeek}/get-date', 'AjaxController@getLabWeekDate' );
 Route::get( '/students/{rollnum}/get-batch-id', 'AjaxController@getStudentBatchId' );
 Route::get( '/students/{rollnum}/get-batch-id', 'AjaxController@getStudentBatchId' );
+
 Route::bind('rollnum', function($value) {
 	return \App\Student::where('rollnum', $value)->first();
 });
@@ -78,3 +79,10 @@ Route::get( '/semesters/{semester}/get-subjects', 'AjaxController@getSemesterSub
 Route::get( '/semesters/{semester}/get-sections', 'AjaxController@getSemesterSections' );
 Route::get( '/sections/{section}/subjects/{subject}/get-faculty', 'AjaxController@getSubjectFaculty' );
 Route::get( '/faculty/{employee}/get-subjects', 'AjaxController@getFacultySubjects' );
+
+//Auth::routes();
+//
+//Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/change-password', 'HomeController@showChangePasswordForm');
+Route::post('/change-password','HomeController@changePassword')->name('changePassword');

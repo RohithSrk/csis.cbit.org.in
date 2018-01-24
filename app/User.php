@@ -41,7 +41,9 @@ class User extends Authenticatable
 	}
 
 	public function getAssignedLabSubjectsArray(){
-		return $this->employee()->first()->subjects()->select(DB::raw("CONCAT(subjects.name, ' (',subjects.code,')') as name"), 'id')->pluck('name', 'id')->toArray();
+    	$labTypes = ['practical', 'seminar', 'mini-project', 'project'];
+
+		return $this->employee()->first()->subjects()->whereIn('type', $labTypes)->select(DB::raw("CONCAT(subjects.name, ' (',subjects.code,')') as name"), 'id')->pluck('name', 'id')->toArray();
 	}
 
 	public function firstDepartment(){
