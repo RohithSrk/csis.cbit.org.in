@@ -305,6 +305,10 @@ h3 {
     border-top-color: rgba(221, 221, 221, .5);
 }
 
+#reset-password-form .panel-body .alert {
+    margin-bottom: 15px;
+}
+
 table.th-bb-n thead tr:first-child td {
     border-bottom: none;
 }
@@ -328,6 +332,10 @@ table.th-bb-n thead tr:first-child td {
 
 .mb-0 {
     margin-bottom: 0;
+}
+
+.mb-15 {
+    margin-bottom: 15px;
 }
 
 .mb-25 {
@@ -386,7 +394,7 @@ table.th-bb-n thead tr:first-child td {
 
 /* login page */
 
-#login-form {
+#reset-password-form, #login-form {
     display: flex;
     align-items: center;
     height: 100%;
@@ -394,17 +402,19 @@ table.th-bb-n thead tr:first-child td {
     background-color: #f1f4f5;
 }
 
+#reset-password-form .alert,
 #login-form .alert {
-    margin-bottom: 0;
     border-radius: 0;
 }
 
+#reset-password-form .panel,
 #login-form .panel {
     border: none;
     border-top: 3px solid #14202e;
     max-width: 370px;
 }
 
+#reset-password-form .panel-footer,
 #login-form .panel-footer {
     padding: 15px 15px;
     border: none;
@@ -469,4 +479,10 @@ table.th-bb-n thead tr:first-child td {
     #sidebar {
         overflow: scroll;
     }
+}
+
+.form-horizontal .form-group-email,
+.form-horizontal .form-group-password {
+    margin-left: 0;
+    margin-right: 0;
 }

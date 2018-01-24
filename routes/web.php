@@ -13,7 +13,15 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get( '/', 'DashboardController@index' )->name( 'home' );
+
+Auth::routes();
+//
+Route::get('/', 'HomeController@index')->name('home');
+//Route::get( '/', 'DashboardController@index' )->name( 'home' );
+
+Route::get('/change-password', 'HomeController@showChangePasswordForm');
+Route::post('/change-password','HomeController@changePassword')->name('changePassword');
+
 
 Route::get( '/students/add-lab-marks', 'LabMarksController@index' );
 Route::post( '/students/add-lab-marks', 'LabMarksController@create' );
@@ -25,10 +33,11 @@ Route::post( '/students/view-lab-marks', 'LabMarksController@viewLabMarks' );
 Route::get( '/students/add-absentee-lab-marks', 'AbsenteeLabMarksController@index' );
 Route::post( '/students/add-absentee-lab-marks', 'AbsenteeLabMarksController@create' );
 Route::put( '/students/add-absentee-lab-marks', 'AbsenteeLabMarksController@store' );
-
-Route::get( '/login', 'AuthController@showLogin' )->name('login');
-Route::post( '/login', 'AuthController@doLogin' );
-Route::get( '/logout', 'AuthController@doLogout' )->name( 'logout' );
+//
+//Route::get( '/login', 'AuthController@showLogin' )->name('login');
+//Route::post( '/login', 'AuthController@doLogin' );
+//Route::get( '/logout', 'AuthController@doLogout' )->name( 'logout' );
+//Route::get( '/logout', '\App\Http\Controllers\Auth\LoginController@logout' )->name( 'logout' );
 
 Route::get('/faculty/assign-courses', 'CoursesController@index' );
 Route::post('/faculty/assign-courses', 'CoursesController@create' );
@@ -79,10 +88,3 @@ Route::get( '/semesters/{semester}/get-subjects', 'AjaxController@getSemesterSub
 Route::get( '/semesters/{semester}/get-sections', 'AjaxController@getSemesterSections' );
 Route::get( '/sections/{section}/subjects/{subject}/get-faculty', 'AjaxController@getSubjectFaculty' );
 Route::get( '/faculty/{employee}/get-subjects', 'AjaxController@getFacultySubjects' );
-
-//Auth::routes();
-//
-//Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/change-password', 'HomeController@showChangePasswordForm');
-Route::post('/change-password','HomeController@changePassword')->name('changePassword');
