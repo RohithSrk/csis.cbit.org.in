@@ -19,10 +19,6 @@ class AuthController extends Controller
     public function showLogin()
     {
 	    $title      = "Login";
-//	    $department = "CHEM";
-//	    $logoText   = "Chemical Lab";
-//	    $name   = "John Doe";
-//	    $date = date( 'd/m/Y' );
 
 	    return view( 'layouts.login', compact( 'title') );
     }
@@ -45,11 +41,6 @@ class AuthController extends Controller
      */
     public function doLogin(Request $request)
     {
-	    // check and sign in
-	    //sign in
-
-//	    dd($request->all());
-
 	    $this->validate($request, [
 	    	'email' => 'required',
 	    	'password' => 'required'

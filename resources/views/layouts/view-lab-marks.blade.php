@@ -8,7 +8,7 @@
 
             @if( ! empty( $subjects ) )
                 <div class="page-header">
-                    <h1 class="page-title ">Weekly Lab Marks Entry</h1>
+                    <h1 class="page-title ">Lab Marks Report</h1>
                 </div>
 
                 <!-- .page-header -->
