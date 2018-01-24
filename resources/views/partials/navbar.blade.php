@@ -39,7 +39,14 @@
                     <li class="disabled"><a href="#"><span class="fa fa-user-circle-o"></span> Profile Settings</a></li>
                     <li><a href="{{ action('HomeController@showChangePasswordForm') }}"><span class="fa fa-cog"></span> Change Password</a></li>
                     <li class="divider" role="separator"></li>
-                    <li><a href="{{ URL::to('logout') }}" id="logout"><span class="fa fa-power-off"></span>Logout</a></li>
+                    <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                            <span class="fa fa-power-off"></span>Logout
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+                    </li>
                 </ul>
             </li>
         </ul>

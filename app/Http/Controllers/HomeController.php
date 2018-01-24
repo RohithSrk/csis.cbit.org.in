@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
@@ -25,7 +26,20 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+	    $title      = "Dashboard - Home";
+
+	    $subjects = DB::table('employee_subject')
+	                  ->select(['employees.id as employee_id', 'sections.id as section_id', 'subjects.code', 'subjects.name'])
+	                  ->leftJoin('employees', 'employees.id', '=', 'employee_subject.employee_id')
+	                  ->leftJoin('subjects', 'subjects.id', '=', 'employee_subject.subject_id')
+	                  ->leftJoin('sections', 'sections.id', '=', 'employee_subject.section_id')
+	                  ->where('employees.id', auth()->user()->employee()->first()->id)->get();
+
+	    $subjects = collect( $subjects )->map( function ( $x ) {
+		    return (array) $x;
+	    } )->toArray();
+
+	    return view( 'layouts.home', compact( 'title', 'subjects' ) );
     }
 
     public function showChangePasswordForm(){

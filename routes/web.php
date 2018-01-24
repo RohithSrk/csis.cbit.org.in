@@ -13,7 +13,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get( '/', 'DashboardController@index' )->name( 'home' );
+
+Auth::routes();
+Route::get('/', 'HomeController@index')->name('home');
+
+Route::get('/change-password', 'HomeController@showChangePasswordForm');
+Route::post('/change-password','HomeController@changePassword')->name('changePassword');
 
 Route::get( '/students/add-lab-marks', 'LabMarksController@index' );
 Route::post( '/students/add-lab-marks', 'LabMarksController@create' );
@@ -26,10 +31,6 @@ Route::get( '/students/add-absentee-lab-marks', 'AbsenteeLabMarksController@inde
 Route::post( '/students/add-absentee-lab-marks', 'AbsenteeLabMarksController@create' );
 Route::put( '/students/add-absentee-lab-marks', 'AbsenteeLabMarksController@store' );
 
-Route::get( '/login', 'AuthController@showLogin' )->name('login');
-Route::post( '/login', 'AuthController@doLogin' );
-Route::get( '/logout', 'AuthController@doLogout' )->name( 'logout' );
-
 Route::get('/faculty/assign-courses', 'CoursesController@index' );
 Route::post('/faculty/assign-courses', 'CoursesController@create' );
 Route::put('/faculty/assign-courses', 'CoursesController@store' );
@@ -37,7 +38,6 @@ Route::put('/faculty/assign-courses', 'CoursesController@store' );
 Route::get( '/lab/manage-mark-types', 'LabMarkTypesController@index' );
 Route::post( '/lab/manage-mark-types', 'LabMarkTypesController@create' );
 Route::put( '/lab/manage-mark-types', 'LabMarkTypesController@store' );
-
 
 Route::get( '/feedback/list', 'FeedbackController@index' );
 Route::get( '/feedback/view', 'FeedbackController@viewResult' );
@@ -79,10 +79,3 @@ Route::get( '/semesters/{semester}/get-subjects', 'AjaxController@getSemesterSub
 Route::get( '/semesters/{semester}/get-sections', 'AjaxController@getSemesterSections' );
 Route::get( '/sections/{section}/subjects/{subject}/get-faculty', 'AjaxController@getSubjectFaculty' );
 Route::get( '/faculty/{employee}/get-subjects', 'AjaxController@getFacultySubjects' );
-
-//Auth::routes();
-//
-//Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('/change-password', 'HomeController@showChangePasswordForm');
-Route::post('/change-password','HomeController@changePassword')->name('changePassword');
