@@ -486,3 +486,13 @@ table.th-bb-n thead tr:first-child td {
     margin-left: 0;
     margin-right: 0;
 }
+
+/* Multiselect Styles */
+
+body select.course-selector {
+    display: none;
+}
+
+body select.faculty-selector {
+    display: none;
+}

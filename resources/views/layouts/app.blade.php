@@ -32,16 +32,6 @@ Crafted with love by @SrkRohith, @ramlmn, @harshatech
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
-    <style type="text/css">
-        body select.course-selector {
-            display: none;
-        }
-
-        body select.faculty-selector {
-            display: none;
-        }
-    </style>
-
     <!-- Styles -->
     <link href="{{ mix('css/app.css') }}" rel="stylesheet">
 </head>

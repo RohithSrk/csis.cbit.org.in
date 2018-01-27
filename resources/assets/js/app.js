@@ -383,6 +383,7 @@ require('./bootstrap');
         init_calenderWidget();
         init_dataTables();
         init_extras();
+
     });
 
     $(window).resize(function () {
