@@ -165,7 +165,7 @@ class FeedbackDataController extends Controller
 					$feedback_datum->X3         = $fdbk_datum['X3'];
 					$feedback_datum->X4         = $fdbk_datum['X4'];
 					$feedback_datum->X4         = $fdbk_datum['X4'];
-					$feedback_datum->percentage = ( ( ( $feedback_datum->X1 + $feedback_datum->X2 + $feedback_datum->X3 + $feedback_datum->X4 ) / 4 ) / 5 ) * 100;
+					$feedback_datum->percentage = ( ( ( $feedback_datum->X1 + (2 * $feedback_datum->X2) + $feedback_datum->X3 + $feedback_datum->X4 ) / 5 ) / 5 ) * 100;
 					$feedback_datum->save();
 
 					session()->flash( 'success', "Feedback submitted successfully." );
