@@ -1,24 +1,3 @@
-@php
-    switch ( auth()->user()->employee()->first()->departments()->first()->code ) {
-        case 'CSE' :
-        case 'IT' :
-            $icon_class = "fa-laptop"; break;
-        case 'MECH' : $icon_class = "fa-cog"; break;
-        case 'EEE' : $icon_class = "fa-bolt"; break;
-        case 'ECE' : $icon_class = "fa-comments-o"; break;
-        case 'CHEM' : $icon_class = "fa-flask"; break;
-        case 'BIOTECH' : $icon_class = "fa-pagelines"; break;
-        case 'CIVIL' : $icon_class = "fa-building-o"; break;
-        default: $icon_class = '';
-    }
-
-    if( auth()->user()->isBelongsToMultipleDeps() ){
-        $logoText = "Lab & Mid marks";
-    } else {
-        $logoText = auth()->user()->employee()->first()->departments()->first()->code . ' Lab';
-    }
-
-@endphp
 <div id="site-navbar">
     <div class="header">
         <div class="logo font-1">
@@ -32,7 +11,11 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right account-settings">
-            <li class="welcome-text"><span>Welcome, {{ auth()->user()->employee()->first()->name }}</span></li>
+            @if( auth()->user()->hasRole( 'Student' ) )
+                <li class="welcome-text"><span>Welcome, {{ auth()->user()->student()->first()->name }}</span></li>
+            @else
+                <li class="welcome-text"><span>Welcome, {{ auth()->user()->employee()->first()->name }}</span></li>
+            @endif
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="fa fa-caret-down"></span></a>
                 <ul class="dropdown-menu">

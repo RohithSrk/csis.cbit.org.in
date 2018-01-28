@@ -28,6 +28,14 @@ class HomeController extends Controller
     {
 	    $title      = "Dashboard - Home";
 
+	    if ( auth()->user()->hasRole( 'Student' ) ) {
+
+		    $subjects = auth()->user()->student()->first()->batch()->first()->section()
+		                      ->first()->semester()->first()->subjects()->get();
+
+		    return view( 'layouts.student-home', compact( 'title', 'subjects' ) );
+	    }
+
 	    $subjects = DB::table('employee_subject')
 	                  ->select(['employees.id as employee_id', 'sections.id as section_id', 'subjects.code', 'subjects.name'])
 	                  ->leftJoin('employees', 'employees.id', '=', 'employee_subject.employee_id')
