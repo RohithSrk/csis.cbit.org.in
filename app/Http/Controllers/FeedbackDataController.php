@@ -133,43 +133,35 @@ class FeedbackDataController extends Controller
 
 		$feedback = Feedback::find( $feedback_id );
 
+//		dd($fdbk_data);
+
 		foreach ( $fdbk_data as $fdbk_datum ) {
 
-			if ( ! empty( $fdbk_datum['rollnum'] ) ) {
+			//TODO: check if already submitted
 
-				$student = Student::where( 'rollnum', $fdbk_datum['rollnum'] )->first();
+			if( ! empty( $fdbk_datum['X1'] )) {
+				$feedback_datum = FeedbackDatum::where( 'feedback_id', $feedback_id )
+				                               ->where( 'employee_id', $faculty_id )
+				                               ->where( 'section_id', $section_id )
+				                               ->where( 'subject_id', $subject_id )
+				                               ->first();
 
-				//TODO: check if student belongs to section_id
-				//TODO: check if already submitted
-
-				if ( ! empty( $student ) ) {
-
-					$feedback_datum = FeedbackDatum::where( 'feedback_id', $feedback_id )
-					                               ->where( 'student_id', $student->id )
-					                               ->where( 'employee_id', $faculty_id )
-					                               ->where( 'section_id', $section_id )
-					                               ->where( 'subject_id', $subject_id )
-					                               ->first();
-
-					if ( empty( $feedback_datum ) ) {
-						$feedback_datum              = new FeedbackDatum();
-						$feedback_datum->feedback_id = $feedback_id;
-						$feedback_datum->student_id  = $student->id;
-						$feedback_datum->section_id  = $section_id;
-						$feedback_datum->subject_id  = $subject_id;
-						$feedback_datum->employee_id = $faculty_id;
-					}
-
-					$feedback_datum->X1         = $fdbk_datum['X1'];
-					$feedback_datum->X2         = $fdbk_datum['X2'];
-					$feedback_datum->X3         = $fdbk_datum['X3'];
-					$feedback_datum->X4         = $fdbk_datum['X4'];
-					$feedback_datum->X4         = $fdbk_datum['X4'];
-					$feedback_datum->percentage = ( ( ( $feedback_datum->X1 + (2 * $feedback_datum->X2) + $feedback_datum->X3 + $feedback_datum->X4 ) / 5 ) / 5 ) * 100;
-					$feedback_datum->save();
-
-					session()->flash( 'success', "Feedback submitted successfully." );
+				if ( empty( $feedback_datum ) ) {
+					$feedback_datum              = new FeedbackDatum();
+					$feedback_datum->feedback_id = $feedback_id;
+					$feedback_datum->section_id  = $section_id;
+					$feedback_datum->subject_id  = $subject_id;
+					$feedback_datum->employee_id = $faculty_id;
 				}
+
+				$feedback_datum->X1         = $fdbk_datum['X1'];
+				$feedback_datum->X2         = $fdbk_datum['X2'];
+				$feedback_datum->X3         = $fdbk_datum['X3'];
+				$feedback_datum->X4         = $fdbk_datum['X4'];
+				$feedback_datum->percentage = ( ( ( $feedback_datum->X1 + (2 * $feedback_datum->X2) + $feedback_datum->X3 + $feedback_datum->X4 ) / 5 ) / 5 ) * 100;
+				$feedback_datum->save();
+
+				session()->flash( 'success', "Feedback submitted successfully." );
 			}
 		}
 

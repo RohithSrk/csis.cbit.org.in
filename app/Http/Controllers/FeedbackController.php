@@ -59,6 +59,7 @@ class FeedbackController extends Controller
      */
 	public function store( Request $request ) {
 		auth()->user()->authorizeRoles( [ 'Editor', 'HOD' ] );
+
 		$title = "Create Feedback";
 
 		$start_date = $request->get( 'start-date' );
@@ -68,6 +69,7 @@ class FeedbackController extends Controller
 		$feedback->name       = $request->get( 'feedback-name' );
 		$feedback->start_date = Carbon::createFromFormat( 'd/m/Y', $start_date );
 		$feedback->end_date   = Carbon::createFromFormat( 'd/m/Y', $end_date );
+		$feedback->feedback_type   = $request->get( 'feedback-type' );
 		$feedback->save();
 
 		$start_date = Carbon::now()->format( 'd/m/Y' );

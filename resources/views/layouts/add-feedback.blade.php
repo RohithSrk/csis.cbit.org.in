@@ -97,9 +97,9 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Roll Number</th>
+                                                <th>Student</th>
                                                 @foreach( $criteria as $criterion )
-                                                    <th title="{{ $criterion->criterion }}">{{ $criterion->code }}</th>
+                                                    <th title="{{ $criterion->code }}">{{ $criterion->criterion }}</th>
                                                 @endforeach
                                             </tr>
                                             </thead>
@@ -107,12 +107,10 @@
                                             @for( $i = 1; $i <= 9; $i++ )
                                                 <tr>
                                                     <td class="width-50">{{ $i }}</td>
-                                                    <td>{{  Form::text('feedback_data[' . $i . '][rollnum]', isset($rollnum)? $rollnum : '', [
-                                                    'class' => 'form-control',
-                                                    'id' => 'rollnum', 'style' => 'max-width: 200px;' ]) }}</td>
+                                                    <td>Student {{ $i }}</td>
                                                     @foreach( $criteria as $criterion )
                                                     <td class="width-100">{{ Form::number( 'feedback_data[' . $i . '][' . $criterion->code . ']' , '',
-                                                           array('min' => 0, 'max' => 5, 'class' => 'form-control', 'title' => $criterion->criterion ))}}</td>
+                                                           array('min' => 0, 'max' => 4, 'class' => 'form-control', 'title' => $criterion->criterion ))}}</td>
                                                     @endforeach
                                                 </tr>
                                             @endfor

@@ -16,7 +16,6 @@ class CreateFeedbackDataTable extends Migration
         Schema::create('feedback_data', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('feedback_id');
-            $table->integer('student_id');
             $table->integer('section_id');
             $table->integer('subject_id');
             $table->integer('employee_id');

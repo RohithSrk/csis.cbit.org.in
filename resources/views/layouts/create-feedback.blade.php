@@ -27,14 +27,14 @@
                                     <div class="section">
                                         <label for="feedback-name" class="field-label">Feedback Name</label>
                                         <label for="feedback-name text" class="field">
-                                            {{  Form::text('feedback-name', isset($feedback_name)? $feedback_name : '', [
+                                            {{  Form::text('feedback-name', $feedback_name ?? '', [
                                                 'class' => 'form-control',
                                                 'id' => 'feedback-name' ]) }}
                                         </label>
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="section">
                                         <label for="start-date" class="field-label">Start Date</label>
                                         <label for="start-date" class="field">
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="section">
                                         <label for="end-date" class="field-label">End Date</label>
                                         <label for="end-date" class="field">
@@ -60,6 +60,17 @@
                                                 <input type="text" id="end-date" name="end-date" value="{{ $end_date }}"
                                                        class="form-control gui-input datetimepicker" placeholder="dd/mm/yyyy">
                                             </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="section">
+                                        <label for="select_feedback_type" class="field-label">Select Type</label>
+                                        <label for="select_feedback_type" class="field">
+                                            {{  Form::select('feedback-type', [ 'new' => 'New', 'old' => 'Old' ], $feedback_type ?? '' , [
+                                                'class' => 'form-control select',
+                                                'id' => 'select_feedback_type' ]) }}
                                         </label>
                                     </div>
                                 </div>
