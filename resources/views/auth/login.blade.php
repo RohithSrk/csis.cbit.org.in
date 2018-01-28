@@ -13,13 +13,13 @@
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
                         <div class="panel-body" align="left">
-                            <p class="mg-btm-15">Enter your email and password to login</p>
+                            <p class="mg-btm-15">Enter your email / Id and password to login</p>
 
                             <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }} form-group-email">
-                                <label for="email" class="col-md-4 hidden control-label">E-Mail Address</label>
+                                <label for="email" class="col-md-4 hidden control-label">E-Mail Address or Id</label>
 
                                 <div class="col-md-6-">
-                                    <input id="email" type="email" class="form-control" name="email" placeholder="email" value="{{ old('email') }}" required autofocus>
+                                    <input id="email" type="text" class="form-control" name="email" placeholder="Email or Id" value="{{ old('email') }}" required autofocus>
 
                                     @if ($errors->has('email'))
                                         <span class="help-block">
@@ -33,7 +33,7 @@
                                 <label for="password" class="col-md-4 hidden control-label">Password</label>
 
                                 <div class="col-md-6-">
-                                    <input id="password" type="password" class="form-control" name="password" placeholder="password" required>
+                                    <input id="password" type="password" class="form-control" name="password" placeholder="Password" required>
 
                                     @if ($errors->has('password'))
                                         <span class="help-block">

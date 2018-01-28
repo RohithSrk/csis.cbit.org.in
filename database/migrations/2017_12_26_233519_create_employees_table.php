@@ -19,6 +19,7 @@ class CreateEmployeesTable extends Migration
 	        $table->string('designation');
 	        $table->string('email');
 	        $table->string('mobile');
+	        $table->integer('user_id');
             $table->timestamps();
         });
 

@@ -18,7 +18,6 @@ class CreateUsersTable extends Migration
             $table->string('username');
             $table->string('email');
             $table->string('password');
-            $table->integer('employee_id' );
             $table->rememberToken();
             $table->timestamps();
         });

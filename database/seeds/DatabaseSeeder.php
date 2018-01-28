@@ -19,6 +19,8 @@ class DatabaseSeeder extends Seeder
 //	    $this->call(RolesTableSeeder::class);
 //	     User seeder will use the roles above created.
 //	    $this->call(UsersTableSeeder::class);
+//	    $this->call(StudentsTableSeeder::class);
+//	    $this->call(StudentEmailSeeder::class);
 
 //		for ($i = 0; $i < 5; $i++){
 //			$emp = new App\Employee();
@@ -238,173 +240,42 @@ class DatabaseSeeder extends Seeder
 //		    }
 //	    }
 
+	    foreach (\App\Employee::all() as $employee){
+	    	$employee->user_id = 0;
+	    	$employee->save();
+	    }
+
 	    foreach (\App\Student::all() as $student){
-	    	if(preg_match( '/^160116733(\d{3})$/', $student->rollnum, $matches ) ){
-			    $arr = range(1, 23);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
+		    $student->user_id = 0;
+		    $student->save();
+	    }
 
-			    $arr[] = '025';
-			    $arr[] = '026';
-
-	    		if(in_array($matches[1], $arr)){
-				    $student->batch_id = 28;
-				    $student->save();
-			    }
-
-			    $arr = [];
-
-			    $arr = range(27, 34);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
-
-			    $arr[] = '036';
-			    $arr[] = '048';
-			    $arr[] = '050';
-			    $arr[] = '053';
-
-			    if(in_array($matches[1], $arr)){
-				    $student->batch_id = 29;
-				    $student->save();
-			    }
-
-			    $arr = [];
-
-			    $arr = range(54, 60);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
-
-			    $arr[] = '181';
-			    $arr[] = '183';
-			    $arr[] = '184';
-			    $arr[] = '186';
-
-			    $arr2 = range(301, 302);
-			    $arr2 = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr2);
-
-			    $arr = array_merge( $arr2, $arr );
-
-			    if(in_array($matches[1], $arr)){
-				    $student->batch_id = 30;
-				    $student->save();
-			    }
-			    /*======= 2/4 sec 2=======*/
-			    $arr = [];
-
-			    $arr = range(61, 86);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
-
-	    		if(in_array($matches[1], $arr)){
-				    $student->batch_id = 31;
-				    $student->save();
-			    }
-
-			    $arr = [];
-
-			    $arr = range(90, 99);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
-
-			    $arr[] = '087';
-			    $arr[] = '089';
-
-			    $arr2 = range(101, 114);
-			    $arr2 = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr2);
-
-			    $arr = array_merge( $arr2, $arr );
-
-			    if(in_array($matches[1], $arr)){
-				    $student->batch_id = 32;
-				    $student->save();
-			    }
-
-			    $arr = [];
-
-			    $arr = range(115, 120);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
-
-			    $arr[] = '182';
-			    $arr[] = '185';
-			    $arr[] = '188';
-			    $arr[] = '189';
-
-			    $arr2 = range(313, 324);
-			    $arr2 = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr2);
-
-			    $arr = array_merge( $arr2, $arr );
-
-			    if(in_array($matches[1], $arr)){
-				    $student->batch_id = 33;
-				    $student->save();
-			    }
-
-			    /*======= 2/4 sec 3=======*/
-			    $arr = [];
-
-			    $arr = range(121, 146);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
-
-	    		if(in_array($matches[1], $arr)){
-				    $student->batch_id = 34;
-				    $student->save();
-			    }
-
-			    $arr = [];
-
-			    $arr = range(147, 172);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
-
-			    if(in_array($matches[1], $arr)){
-				    $student->batch_id = 35;
-				    $student->save();
-			    }
-
-			    $arr = [];
-
-			    $arr = range(173, 180);
-			    $arr = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr);
-
-			    $arr[] = '187';
-			    $arr[] = '190';
-
-			    $arr2 = range(325, 336);
-			    $arr2 = array_map(function($item) {
-				    return str_pad($item, 3, '0', STR_PAD_LEFT);
-			    }, $arr2);
-
-			    $arr = array_merge( $arr2, $arr );
-
-			    if(in_array($matches[1], $arr)){
-				    $student->batch_id = 36;
-				    $student->save();
-			    }
-
+	    foreach (\App\Employee::all() as $employee){
+		    $emp_user = $employee->user()->first();
+		    if( empty( $emp_user )){
+			    $emp_user = new User();
+			    $emp_user->password = bcrypt( '123456' );
+			    $emp_user->username = $employee->id;
+			    $emp_user->email = $employee->email;
+			    $emp_user->save();
+			    $employee->user_id = $emp_user->id;
+			    $employee->save();
+			    $role =  Role::find(3);
+			    $emp_user->roles()->attach($role);
 		    }
+	    }
 
-		    if(preg_match( '/^160115733163$/', $student->rollnum, $matches ) ) {
-			    $student->batch_id = 36;
-			    $student->save();
-
+	    foreach (\App\Student::all() as $student){
+	    	if( empty( $student->user()->first() )){
+	    		$std_user = new User();
+	    		$std_user->username = $student->rollnum;
+	    		$std_user->email = $student->email;
+	    		$std_user->password = bcrypt( $student->rollnum );
+	    		$std_user->save();
+	    		$student->user_id = $std_user->id;
+	    		$student->save();
+			    $role =  Role::find(6);
+			    $std_user->roles()->attach($role);
 		    }
 	    }
 

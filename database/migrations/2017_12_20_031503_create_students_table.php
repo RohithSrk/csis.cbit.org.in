@@ -25,6 +25,7 @@ class CreateStudentsTable extends Migration
 		    $table->string( 'parent_mobile' );
 		    $table->string( 'email' );
 		    $table->integer( 'batch_id' );
+		    $table->integer( 'user_id' );
 		    $table->timestamps();
 	    } );
     }

@@ -45,7 +45,6 @@ class UsersTableSeeder extends Seeder
 	    $user->save();
 	    $user->roles()->attach($role_hod);
 
-
 	    for ($i = 0; $i < 5; $i++){
 			$faculty = new App\Employee();
 			$faculty->first_name = $faker->firstName;
