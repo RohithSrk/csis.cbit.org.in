@@ -216,6 +216,39 @@ class LabMarksController extends Controller
 			'subject_id', 'batch_id', 'section_id', 'students', 'mark_types' ) );
 	}
 
+	public function studentIndexLabMarks(){
+		auth()->user()->authorizeRoles( [ 'Student' ] );
+
+		$title = "My Lab Marks";
+
+		$subjects_arr = auth()->user()->student()->first()->batch()->first()->section()->first()->semester()->first()
+		                  ->subjects()->where('type', 'practical')->get()->pluck('name', 'id')->toArray();
+
+		$lab_weeks_arr = LabWeek::pluck( 'label', 'id' )->toArray();
+
+		return view( 'layouts.student-view-lab-marks', compact( 'title', 'subjects_arr', 'lab_weeks_arr') );
+	}
+
+	public function studentViewLabMarks(){
+		auth()->user()->authorizeRoles( [ 'Student' ] );
+
+		$this->validate( request(), [
+			'subject'  => 'required|integer|min:1',
+		] );
+
+		$title = "My Lab Marks";
+		$subject_id = request()->get( 'subject' );
+
+		$lab_mark_types = Subject::find( $subject_id )->labMarkTypes();
+		$lab_mark_types_arr = $lab_mark_types->pluck('name', 'id');
+
+		$lab_marks = auth()->user()->student()->first()->labMarks()
+		                   ->whereIn('mark_type_id', $lab_mark_types->pluck('id')->toArray())->get()->groupBy('date');
+
+//		dd($lab_marks);
+
+		return view( 'layouts.student-view-lab-marks', compact( 'title', 'lab_mark_types_arr' ) );
+	}
 
     /**
      * Display the specified resource.

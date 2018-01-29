@@ -13693,7 +13693,6 @@ table.th-bb-n thead tr:first-child td {
 
 #reset-password-form .alert,
 #login-form .alert {
-    /*margin-bottom: 0;*/
     border-radius: 0;
 }
 
@@ -13775,4 +13774,12 @@ table.th-bb-n thead tr:first-child td {
 .form-horizontal .form-group-password {
     margin-left: 0;
     margin-right: 0;
+}
+
+/* Multiselect Styles */
+
+body select.course-selector,
+body select.faculty-selector,
+body select.labweek-selector {
+    display: none;
 }

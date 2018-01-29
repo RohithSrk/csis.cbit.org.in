@@ -243,6 +243,27 @@ require('./bootstrap');
             }
         });
 
+        $('.labweek-selector').multiselect({
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+            maxHeight: 400,
+            buttonText: function(options, select) {
+                if (options.length === 0) {
+                    return 'No option selected..';
+                }
+                else if (options.length > 3) {
+                    return options.length + ' options selected';
+                } else {
+                    var labels = [];
+                    options.each(function() {
+                        labels.push($(this).text());
+                    });
+                    return labels.join(', ') + '';
+                }
+            }
+        });
+
         $('.course-selector.report, .faculty-selector.report').multiselect({
             enableFiltering: true,
             enableCaseInsensitiveFiltering: true,

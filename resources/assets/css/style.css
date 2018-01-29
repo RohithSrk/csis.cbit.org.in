@@ -489,10 +489,8 @@ table.th-bb-n thead tr:first-child td {
 
 /* Multiselect Styles */
 
-body select.course-selector {
-    display: none;
-}
-
-body select.faculty-selector {
+body select.course-selector,
+body select.faculty-selector,
+body select.labweek-selector {
     display: none;
 }

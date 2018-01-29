@@ -31,7 +31,7 @@
                         @if( count( $errors->all() ) )
                         <ul class="alert alert-danger mg-top-15 text-left">
                             @foreach( $errors->all() as $error )
-                                <li style="margin-left: 18px;">{{$error}}</li>
+                                <li style="margin-left: 18px;">{{ $error }}</li>
                             @endforeach
                         </ul>
                         @endif

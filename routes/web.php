@@ -24,6 +24,9 @@ Route::get( '/students/add-lab-marks', 'LabMarksController@index' );
 Route::post( '/students/add-lab-marks', 'LabMarksController@create' );
 Route::put( '/students/add-lab-marks', 'LabMarksController@store' );
 
+Route::get( '/lab-marks/view', 'LabMarksController@studentIndexLabMarks' );
+Route::post( '/lab-marks/view', 'LabMarksController@studentViewLabMarks' );
+
 Route::get( '/students/view-lab-marks', 'LabMarksController@indexLabMarks' );
 Route::post( '/students/view-lab-marks', 'LabMarksController@viewLabMarks' );
 

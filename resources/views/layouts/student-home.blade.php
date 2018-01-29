@@ -22,7 +22,7 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Course Name</th>
-                                            <th>Type</th>
+                                            <th>Course Type</th>
                                         </tr>
                                         </thead>
                                         <tbody id="lab-mark-types">

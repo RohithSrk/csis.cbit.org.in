@@ -6,7 +6,11 @@
 
 @include ( 'partials.navbar' )
 
-@include ( 'partials.sidebar' )
+    @if ( auth()->user()->hasRole( 'Student' ) )
+        @include ( 'partials.student-sidebar' )
+    @else
+        @include ( 'partials.sidebar' )
+    @endif
 
 @yield( 'page-content' )
 
