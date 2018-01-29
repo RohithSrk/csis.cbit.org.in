@@ -224,9 +224,7 @@ class LabMarksController extends Controller
 		$subjects_arr = auth()->user()->student()->first()->batch()->first()->section()->first()->semester()->first()
 		                  ->subjects()->where('type', 'practical')->get()->pluck('name', 'id')->toArray();
 
-		$lab_weeks_arr = LabWeek::pluck( 'label', 'id' )->toArray();
-
-		return view( 'layouts.student-view-lab-marks', compact( 'title', 'subjects_arr', 'lab_weeks_arr') );
+		return view( 'layouts.student-view-lab-marks', compact( 'title', 'subjects_arr') );
 	}
 
 	public function studentViewLabMarks(){
@@ -239,15 +237,33 @@ class LabMarksController extends Controller
 		$title = "My Lab Marks";
 		$subject_id = request()->get( 'subject' );
 
+        $subjects_arr = auth()->user()->student()->first()->batch()->first()->section()->first()->semester()->first()
+            ->subjects()->where('type', 'practical')->get()->pluck('name', 'id')->toArray();
+
 		$lab_mark_types = Subject::find( $subject_id )->labMarkTypes();
-		$lab_mark_types_arr = $lab_mark_types->pluck('name', 'id');
+		$lab_mark_types_arr = $lab_mark_types->pluck('name', 'id')->toArray();
 
-		$lab_marks = auth()->user()->student()->first()->labMarks()
-		                   ->whereIn('mark_type_id', $lab_mark_types->pluck('id')->toArray())->get()->groupBy('date');
+		$lab_marks = auth()->user()->student()->first()->labMarks()->with('markType')
+		                   ->whereIn('mark_type_id', $lab_mark_types->pluck('id')->toArray())->get()->groupBy('date')->toArray();
 
-//		dd($lab_marks);
+        $lab_marks_data = [];
 
-		return view( 'layouts.student-view-lab-marks', compact( 'title', 'lab_mark_types_arr' ) );
+        foreach( $lab_marks as $date => $lab_mark ){
+
+            $lab_mark_data = [];
+
+            $lw_id = null;
+
+            foreach( $lab_mark as $lm ){
+                $lab_mark_data[ $lm[ 'mark_type' ]['id'] ] =  $lm[ 'marks_scored' ];
+                $lw_id = $lm['lab_week_id'];
+            }
+
+            $lab_marks_data[LabWeek::find($lw_id)->label] =  [$date, $lab_mark_data];
+        }
+
+        return view( 'layouts.student-view-lab-marks', compact( 'title', 'lab_marks_data',
+            'lab_mark_types_arr', 'subjects_arr', 'subject_id' ) );
 	}
 
     /**

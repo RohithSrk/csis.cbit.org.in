@@ -20,6 +20,8 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::get('/change-password', 'HomeController@showChangePasswordForm');
 Route::post('/change-password','HomeController@changePassword')->name('changePassword');
 
+Route::get( '/student/view-lab-marks', 'LabMarksController@show' );
+
 Route::get( '/students/add-lab-marks', 'LabMarksController@index' );
 Route::post( '/students/add-lab-marks', 'LabMarksController@create' );
 Route::put( '/students/add-lab-marks', 'LabMarksController@store' );

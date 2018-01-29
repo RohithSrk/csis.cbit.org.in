@@ -16,7 +16,6 @@ try {
     require('chart.js');
     require('datatables.net');
     require('./vendor/zabuto_calender');
-    require('jquery.scrollbar');
 } catch (e) {}
 
 /**
