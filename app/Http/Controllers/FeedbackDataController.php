@@ -44,8 +44,7 @@ class FeedbackDataController extends Controller
 
 		$faculty_arr = Subject::find( $subjects->first()->id )->getAssignedFacultyNames( $sections->first()->id );
 
-		return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr',
-			'subjects_arr', 'sections_arr', 'faculty_arr' ) );
+		return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr', 'sections_arr' ) );
 	}
 
     /**
@@ -60,27 +59,20 @@ class FeedbackDataController extends Controller
 
 		$this->validate( request(), [
 			'semester' => 'required',
-			'subject'  => 'required',
 			'section'  => 'required',
-			'faculty'  => 'required',
 		] );
 
 		$semester_id = request( 'semester' );
-		$subject_id  = request( 'subject' );
 		$section_id  = request( 'section' );
-		$faculty_id  = request( 'faculty' );
 
 		$count = FeedbackDatum::where( 'feedback_id', $feedback->id )
-		                      ->where( 'employee_id', $faculty_id )
 		                      ->where( 'section_id', $section_id )
-		                      ->where( 'subject_id', $subject_id )
 		                      ->count();
 
 		if ( $count > 0 ) {
 			return Redirect::action( 'FeedbackDataController@index', [ 'feedback' => $feedback->id ] )
 			               ->withErrors( [ 'message' => "Feedback submitted already." ] );
 		}
-
 
 		$semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
 
@@ -95,14 +87,14 @@ class FeedbackDataController extends Controller
 		$sections     = $semester->sections();
 		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
-		$faculty_arr = Subject::find( $subject_id )->getAssignedFacultyNames( $section_id );
+//		$faculty_arr = Subject::find( $subject_id )->getAssignedFacultyNames( $section_id );
 
 		$criteria = Criterion::all();
 
 		$year = $semester->year()->first();
 
 		return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr',
-			'subjects_arr', 'sections_arr', 'faculty_arr', 'semester_id', 'subject_id', 'section_id', 'faculty_id', 'criteria', 'year' ) );
+			'subjects_arr', 'sections_arr', 'semester_id', 'section_id', 'criteria', 'year' ) );
 	}
 
     /**

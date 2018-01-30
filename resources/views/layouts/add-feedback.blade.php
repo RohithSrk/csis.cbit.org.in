@@ -7,13 +7,13 @@
             @include ('partials.alerts')
 
             <div class="page-header">
-                <h1 class="page-title ">Add Feedback</h1>
+                <h1 class="page-title ">Add Consolidated Feedback</h1>
             </div><!-- .page-header -->
 
             <div class="page-content">
 
                 <div class="row">
-                    <div class="col-lg-12">
+                    <div class="col-lg-9">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">Create Feedback Form</h4>
@@ -21,7 +21,7 @@
                             {{ Form::open(['action' => ['FeedbackDataController@create', $feedback->id], 'method' => 'post']) }}
 
                             <div class="panel-body admin-form">
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="section">
                                         <label for="select_semester" class="field-label">Select Semester</label>
                                         <label for="select_semester" class="field">
@@ -32,18 +32,7 @@
                                     </div><!-- section -->
                                 </div><!-- col-md-4 -->
 
-                                <div class="col-md-5">
-                                    <div class="section">
-                                        <label for="select_subject" class="field-label">Select Course</label>
-                                        <label for="select_subject" class="field">
-                                            {{  Form::select('subject', $subjects_arr, isset($subject_id)? $subject_id : '' , [
-                                                'class' => 'form-control select',
-                                                'id' => 'select_subject' ]) }}
-                                        </label>
-                                    </div><!-- section -->
-                                </div><!-- col-md-4 -->
-
-                                <div class="col-md-2">
+                                <div class="col-md-3">
                                     <div class="section">
                                         <label for="select_section" class="field-label">Select Section</label>
                                         <label for="select_section" class="field">
@@ -53,17 +42,6 @@
                                         </label>
                                     </div><!-- .section -->
                                 </div><!-- .col-md-4 -->
-
-                                <div class="col-md-3">
-                                    <div class="section">
-                                        <label for="select_faculty" class="field-label">Select Faculty</label>
-                                        <label for="select_faculty" class="field">
-                                            {{  Form::select('faculty', $faculty_arr, isset($faculty_id)? $faculty_id : '' , [
-                                                'class' => 'form-control select',
-                                                'id' => 'select_faculty' ]) }}
-                                        </label>
-                                    </div><!-- section -->
-                                </div><!-- col-md-4 -->
 
                             </div><!-- .panel-body -->
 
@@ -81,14 +59,12 @@
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h4 class="panel-title">
-                                       {{$year->name}} {{ $sections_arr[$section_id] }} Feedback for {{ $faculty_arr[$faculty_id] }} reg. {{ $subjects_arr[$subject_id] }}
+                                       {{$year->name}} {{ $sections_arr[$section_id] }} Feedback.
                                     </h4>
                                 </div>
                                 {{ Form::open(array('action' => ['FeedbackDataController@store', $feedback->id], 'method' => 'put')) }}
-                                {{ Form::hidden('subject', $subject_id) }}
                                 {{ Form::hidden('section', $section_id) }}
                                 {{ Form::hidden('semester', $semester_id) }}
-                                {{ Form::hidden('faculty', $faculty_id) }}
                                 {{ Form::hidden('feedback', $feedback->id) }}
 
                                 <div class="panel-body marks-table">
@@ -97,23 +73,34 @@
                                             <thead>
                                             <tr>
                                                 <th>#</th>
-                                                <th>Student</th>
+                                                <th>Subject</th>
+                                                <th>Faculty</th>
                                                 @foreach( $criteria as $criterion )
                                                     <th title="{{ $criterion->code }}">{{ $criterion->criterion }}</th>
                                                 @endforeach
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            @for( $i = 1; $i <= 9; $i++ )
+                                            @php $i = 0 @endphp
+                                            @foreach( $subjects_arr as $subject )
+                                                @php
+                                                    $faculty_arr = Subject::find( $subject->id )->getAssignedFacultyNames( $section_id );
+                                                @endphp
                                                 <tr>
-                                                    <td class="width-50">{{ $i }}</td>
-                                                    <td>Student {{ $i }}</td>
+                                                    <td class="width-50">{{ ++$i }}</td>
+                                                    <td>$subject->name</td>
+                                                    <td>
+                                                        {{  Form::select('faculty[]', $faculty_arr, $faculty_id ?? '' , [
+                                                            'class' => 'form-control select faculty-selector report',
+                                                            'id' => 'select_faculty',
+                                                            'multiple' => 'multiple' ]) }}
+                                                    </td>
                                                     @foreach( $criteria as $criterion )
                                                     <td class="width-100">{{ Form::number( 'feedback_data[' . $i . '][' . $criterion->code . ']' , '',
                                                            array('min' => 0, 'max' => 4, 'class' => 'form-control', 'title' => $criterion->criterion ))}}</td>
                                                     @endforeach
                                                 </tr>
-                                            @endfor
+                                            @endforeach
                                             </tbody>
                                         </table>
                                     </div><!-- .table-responsive -->
