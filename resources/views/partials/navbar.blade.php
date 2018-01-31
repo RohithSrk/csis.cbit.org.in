@@ -33,5 +33,5 @@
                 </ul>
             </li>
         </ul>
-    </div><!-- .nabar-container -->
+    </div><!-- .navbar-container -->
 </div><!-- #site-navbar -->
