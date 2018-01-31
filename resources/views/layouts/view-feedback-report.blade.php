@@ -88,7 +88,7 @@
                                                     <td >{{ $subjects_arr[ $feedback_datum['subject_id']] }}</td>
                                                     <td >{{ sectionGetYearSectionName( $feedback_datum['section_id'] ) }}</td>
                                                     @foreach( $criteria as $criterion )
-                                                        <td title="{{ $criterion->criterion }}">{{ round(($feedback_datum[$criterion->code] / 5) * 100, 2) }}</td>
+                                                        <td title="{{ $criterion->criterion }}">{{ round(($feedback_datum[$criterion->code] / 4) * 100, 2) }}</td>
                                                     @endforeach
                                                     <td >{{ round($feedback_datum['percentage'], 2) }}</td>
                                                 </tr>

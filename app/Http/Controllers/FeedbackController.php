@@ -154,10 +154,10 @@ class FeedbackController extends Controller
 
 			    $dataset['label'] = "{$year->name} {$section->name} - {$subject->name} ($subject->code)";
 			    $dataset['data']  = [
-				    round( ($feedback_datum['X1'] / 5) * 100, 2 ),
-				    round( ($feedback_datum['X2'] / 5) * 100, 2 ),
-				    round( ($feedback_datum['X3'] / 5) * 100, 2 ),
-				    round( ($feedback_datum['X4'] / 5) * 100, 2 ),
+				    round( ($feedback_datum['X1'] / 4) * 100, 2 ),
+				    round( ($feedback_datum['X2'] / 4) * 100, 2 ),
+				    round( ($feedback_datum['X3'] / 4) * 100, 2 ),
+				    round( ($feedback_datum['X4'] / 4) * 100, 2 ),
 				    round( $feedback_datum['percentage'], 2 )
 			    ];
 			    $dataset['borderWidth'] = 1;

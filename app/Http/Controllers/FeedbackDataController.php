@@ -84,6 +84,7 @@ class FeedbackDataController extends Controller
 		$subjects_arr = $subjects->select( 'id', DB::raw( "concat(name, ' (', code,')') as name_code" ) )
 		                         ->pluck( 'name_code', 'id' )->toArray();
 
+
 		$sections     = $semester->sections();
 		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
@@ -109,29 +110,25 @@ class FeedbackDataController extends Controller
 
 		$this->validate( request(), [
 			'semester'      => 'required',
-			'subject'       => 'required',
 			'section'       => 'required',
-			'faculty'       => 'required',
 			'feedback'      => 'required',
 			'feedback_data' => 'required',
 		] );
 
 		$semester_id = $request->get( 'semester' );
-		$subject_id  = $request->get( 'subject' );
 		$section_id  = $request->get( 'section' );
-		$faculty_id  = $request->get( 'faculty' );
 		$feedback_id = $request->get( 'feedback' );
 		$fdbk_data   = $request->get( 'feedback_data' );
 
 		$feedback = Feedback::find( $feedback_id );
 
 //		dd($fdbk_data);
+		//TODO: check if already submitted
 
-		foreach ( $fdbk_data as $fdbk_datum ) {
+		foreach ( $fdbk_data as $subject_id => $fdbk_datum ) {
 
-			//TODO: check if already submitted
+			foreach( $fdbk_datum as $faculty_id => $criteria ){
 
-			if( ! empty( $fdbk_datum['X1'] )) {
 				$feedback_datum = FeedbackDatum::where( 'feedback_id', $feedback_id )
 				                               ->where( 'employee_id', $faculty_id )
 				                               ->where( 'section_id', $section_id )
@@ -146,17 +143,20 @@ class FeedbackDataController extends Controller
 					$feedback_datum->employee_id = $faculty_id;
 				}
 
-				$feedback_datum->X1         = $fdbk_datum['X1'];
-				$feedback_datum->X2         = $fdbk_datum['X2'];
-				$feedback_datum->X3         = $fdbk_datum['X3'];
-				$feedback_datum->X4         = $fdbk_datum['X4'];
-				$feedback_datum->percentage = ( ( ( $feedback_datum->X1 + (2 * $feedback_datum->X2) + $feedback_datum->X3 + $feedback_datum->X4 ) / 5 ) / 5 ) * 100;
-				$feedback_datum->save();
+				$feedback_datum->X1         = $criteria['X1'];
+				$feedback_datum->X2         = $criteria['X2'];
+				$feedback_datum->X3         = $criteria['X3'];
+				$feedback_datum->X4         = $criteria['X4'];
+				$feedback_datum->student    = 'All';
+				$feedback_datum->percentage = ( ( ( $feedback_datum->X1 + (2 * $feedback_datum->X2) + $feedback_datum->X3 + $feedback_datum->X4 ) / 5 ) / 4 ) * 100;
 
-				session()->flash( 'success', "Feedback submitted successfully." );
+				if ( $feedback_datum->save() ) {
+					session()->flash( 'success', "Feedback submitted successfully." );
+				} else {
+					App::abort( 500, 'Error' );
+				}
 			}
 		}
-
 
 		$semesters = Semester::whereIN( 'year_id', auth()->user()->firstDepartment()->years()->pluck( 'id' )->toArray() );
 
@@ -170,12 +170,8 @@ class FeedbackDataController extends Controller
 		$sections     = $semester->sections();
 		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
-		$faculty_arr = Subject::find( $subject_id )->getAssignedFacultyNames( $section_id );
-
-		$year = $semester->year()->first();
-
 		return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr',
-			'subjects_arr', 'sections_arr', 'faculty_arr', 'semester_id', 'subject_id', 'section_id', 'faculty_id', 'year' ) );
+			'sections_arr', 'semester_id', 'section_id' ) );
 	}
 
     /**

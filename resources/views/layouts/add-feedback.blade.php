@@ -82,24 +82,21 @@
                                             </thead>
                                             <tbody>
                                             @php $i = 0 @endphp
-                                            @foreach( $subjects_arr as $subject )
+                                            @foreach( $subjects_arr as $subject_id => $subject_name_code )
                                                 @php
-                                                    $faculty_arr = Subject::find( $subject->id )->getAssignedFacultyNames( $section_id );
+                                                    $faculty_arr = \App\Subject::find( $subject_id )->getAssignedFacultyNames( $section_id );
                                                 @endphp
-                                                <tr>
-                                                    <td class="width-50">{{ ++$i }}</td>
-                                                    <td>$subject->name</td>
-                                                    <td>
-                                                        {{  Form::select('faculty[]', $faculty_arr, $faculty_id ?? '' , [
-                                                            'class' => 'form-control select faculty-selector report',
-                                                            'id' => 'select_faculty',
-                                                            'multiple' => 'multiple' ]) }}
-                                                    </td>
-                                                    @foreach( $criteria as $criterion )
-                                                    <td class="width-100">{{ Form::number( 'feedback_data[' . $i . '][' . $criterion->code . ']' , '',
-                                                           array('min' => 0, 'max' => 4, 'class' => 'form-control', 'title' => $criterion->criterion ))}}</td>
-                                                    @endforeach
-                                                </tr>
+                                                @foreach( $faculty_arr as $faculty_id =>  $faculty_name )
+                                                    <tr>
+                                                        <td class="width-50">{{ ++$i }}</td>
+                                                        <td>{{ $subject_name_code }}</td>
+                                                        <td>{{ $faculty_name }}</td>
+                                                        @foreach( $criteria as $criterion )
+                                                            <td class="width-100">{{Form::number( 'feedback_data[' . $subject_id . ']['. $faculty_id .' ][' . $criterion->code . ']' , '',
+                                                           array('min' => 0, 'max' => 4, 'class' => 'form-control', 'title' => $criterion->criterion, 'required' ))}}</td>
+                                                        @endforeach
+                                                    </tr>
+                                                @endforeach
                                             @endforeach
                                             </tbody>
                                         </table>
