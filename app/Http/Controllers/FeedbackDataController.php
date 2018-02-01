@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Criterion;
 use App\Feedback;
 use App\FeedbackDatum;
+use App\FeedbackUser;
+use App\Section;
 use App\Semester;
 use App\Student;
 use App\Subject;
@@ -217,5 +219,38 @@ class FeedbackDataController extends Controller
     public function destroy(Feedback $feedback)
     {
         //
+    }
+
+    public function selectFeedbackUsers(Feedback $feedback){
+	    $title = "Select Feedback Users";
+
+	    $semester = Semester::find( 1 );
+	    $semesters_arr = Semester::all()->pluck( 'name', 'id' )->toArray();
+	    $sections     = $semester->sections();
+	    $sections_arr = $sections->pluck( 'name', 'id' )->toArray();
+
+	    return view( 'layouts.select-feedback-users', compact( 'title', 'semesters_arr', 'sections_arr',
+		    'feedback' ));
+    }
+
+    public function listFeedbackUsers(Feedback $feedback){
+	    $title = "Select Feedback Users";
+	    $semester_id = request()->get('semester');
+	    $section_id = request()->get('section');
+	    $semesters_arr = Semester::all()->pluck( 'name', 'id' )->toArray();
+	    $semester = Semester::find($semester_id);
+	    $sections = $semester->sections();
+	    $sections_arr = $sections->pluck( 'name', 'id' )->toArray();
+	    $year         = $semester->year()->first();
+	    $feedback_users = FeedbackUser::where('feedback_id', $feedback->id)->where('section_id', $section_id)->get();
+	    return view( 'layouts.select-feedback-users', compact( 'title', 'semesters_arr', 'sections_arr',
+		    'feedback', 'feedback_users', 'semester_id', 'section_id', 'year' ));
+    }
+
+    public function printFeedbackUsers( Feedback $feedback, Section $section ){
+    	$title = "CBIT Anonymous Feedback System";
+	    $year = $section->semester->year;
+	    $feedback_users = FeedbackUser::where('feedback_id', $feedback->id)->where('section_id', $section->id)->get();
+	    return view( 'layouts.print-feedback-users', compact( 'title', 'year', 'feedback', 'section', 'feedback_users') );
     }
 }

@@ -45,6 +45,11 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'feedbackUser' => [
+	        'driver' => 'session',
+	        'provider' => 'feedbackUsers',
+        ],
     ],
 
     /*
@@ -68,6 +73,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'feedbackUsers' => [
+            'driver' => 'eloquent',
+            'model' => App\FeedbackUser::class,
         ],
 
         // 'users' => [

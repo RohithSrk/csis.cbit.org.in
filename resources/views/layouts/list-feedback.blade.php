@@ -37,9 +37,17 @@
                                                 <tr>
                                                     <td class="width-50">{{ ++$i }}</td>
                                                     <td >{{ $feedback_item->name }}</td>
-                                                    <td class="width-100"><a href="/feedback-data/{{$feedback_item->id}}/add" class="btn btn-sm btn-default">Add Data</a></td>
-                                                    <td class="width-100"><a href="/feedback/{{$feedback_item->id}}/edit" class="btn btn-sm btn-default">Edit Name/Dates</a></td>
-                                                    <td class="width-100"><a href="/feedback-data/{{$feedback_item->id}}/edit" class="btn btn-sm btn-default">Edit Data</a></td>
+                                                    @if( $feedback_item->feedback_type == 'new' )
+                                                        <td class="width-100"><a href="/feedback-new-data/{{$feedback_item->id}}/get" class="btn btn-sm btn-default">Get Users</a></td>
+                                                        <td class="width-100" colspan="2"><a href="/feedback/{{$feedback_item->id}}/edit" class="btn btn-sm btn-default">Edit Name/Dates</a></td>
+                                                    @else
+                                                        <td class="width-100"><a href="/feedback-data/{{$feedback_item->id}}/add" class="btn btn-sm btn-default">Add Data</a></td>
+                                                        <td class="width-100"><a href="/feedback/{{$feedback_item->id}}/edit" class="btn btn-sm btn-default">Edit Name/Dates</a></td>
+                                                    @endif
+
+                                                    @if( $feedback_item->feedback_type != 'new' )
+                                                        <td class="width-100"><a href="/feedback-data/{{$feedback_item->id}}/edit" class="btn btn-sm btn-default">Edit Data</a></td>
+                                                    @endif
                                                     <td class="width-100"><a href="/feedback/{{$feedback_item->id}}/delete" class="btn btn-sm btn-default">Delete</a></td>
                                                 </tr>
                                             @endforeach

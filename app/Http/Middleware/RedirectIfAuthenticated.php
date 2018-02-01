@@ -17,9 +17,18 @@ class RedirectIfAuthenticated
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (Auth::guard($guard)->check()) {
-            return redirect('/home');
-        }
+	    switch ($guard) {
+		    case 'feedbackUser':
+			    if (Auth::guard($guard)->check()) {
+				    return redirect()->route('feedback-user.dashboard');
+			    }
+			    break;
+		    default:
+			    if (Auth::guard($guard)->check()) {
+				    return redirect('/');
+			    }
+			    break;
+	    }
 
         return $next($request);
     }

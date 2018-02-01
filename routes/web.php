@@ -62,12 +62,26 @@ Route::get( '/feedback-data/{feedback}/add', 'FeedbackDataController@index' );
 Route::post( '/feedback-data/{feedback}/add', 'FeedbackDataController@create' );
 Route::put( '/feedback-data/{feedback}/add', 'FeedbackDataController@store' );
 
+Route::get( '/feedback-new-data/{feedback}/get', 'FeedbackDataController@selectFeedbackUsers' );
+Route::post( '/feedback-new-data/{feedback}/get', 'FeedbackDataController@listFeedbackUsers' );
+Route::get( '/feedback-new/{feedback}/{section}/print-users', 'FeedbackDataController@printFeedbackUsers' );
+
 Route::get( '/feedback-data/{feedback}/edit', 'FeedbackDataController@show' );
 Route::post( '/feedback-data/{feedback}/edit', 'FeedbackDataController@edit' );
 Route::put( '/feedback-data/{feedback}/edit', 'FeedbackDataController@update' );
 
+// Anonymous Feedback.
 
-// Ajax Routes
+Route::get('/anonymous-feedback/login', 'Auth\FeedbackUserLoginController@showLoginForm' )
+	   ->name('feedback-user.login');
+Route::post('/anonymous-feedback/login', 'Auth\FeedbackUserLoginController@login' )
+	   ->name('feedback-user.login.submit');
+Route::get('/anonymous-feedback', 'FeedbackUserController@index' )
+       ->name('feedback-user.dashboard');
+Route::post('/anonymous-feedback', 'FeedbackUserController@store' )
+       ->name('feedback-user.dashboard');
+
+// Ajax Routes.
 
 Route::get( '/subjects/{subject}/get-sections', 'AjaxController@getSubjectSections' );
 Route::get( '/sections/{section}/get-batches', 'AjaxController@getSectionBatches' );

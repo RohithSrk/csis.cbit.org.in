@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Criterion;
+use App\Department;
 use App\Employee;
 use App\Feedback;
 use App\FeedbackDatum;
+use App\FeedbackUser;
 use App\Section;
 use App\Subject;
 use App\User;
@@ -70,12 +72,39 @@ class FeedbackController extends Controller
 		$feedback->start_date = Carbon::createFromFormat( 'd/m/Y', $start_date );
 		$feedback->end_date   = Carbon::createFromFormat( 'd/m/Y', $end_date );
 		$feedback->feedback_type   = $request->get( 'feedback-type' );
-		$feedback->save();
 
 		$start_date = Carbon::now()->format( 'd/m/Y' );
 		$end_date   = Carbon::now()->addMonths( 3 )->format( 'd/m/Y' );
 
-		session()->flash( 'success', 'Feedback created successfully.' );
+		if ( $feedback->save() ) {
+			session()->flash( 'success', 'Feedback created successfully.' );
+
+
+			if( $feedback->feedback_type == 'new' ){
+
+				foreach( Section::all() as $section ){
+					$semester = $section->semester;
+					$year_no = $semester->year->name[0];
+					$section_no = substr($section->name, -1);
+					for ($i = 1; $i <= 10; $i++){
+						$password = str_random(8);
+						$feedback_user = new FeedbackUser();
+						$feedback_user->username = "F{$feedback->id}{$semester->id}BE{$year_no}4S{$section_no}S{$i}";
+						$feedback_user->password = bcrypt( $password );
+						$feedback_user->plain_password =  $password ;
+						$feedback_user->feedback_id = $feedback->id;
+						$feedback_user->section_id = $section->id;
+						$feedback_user->student = "Student {$i}";
+						$feedback_user->save();
+					}
+
+				}
+
+			}
+
+		} else {
+			App::abort( 500, 'Error' );
+		}
 
 		return view( 'layouts.create-feedback', compact( 'title', 'start_date', 'end_date' ) );
 	}
