@@ -29,7 +29,7 @@
                                         <label for="feedback-name text" class="field">
                                             {{  Form::text('feedback-name', $feedback_name ?? '', [
                                                 'class' => 'form-control',
-                                                'id' => 'feedback-name' ]) }}
+                                                'id' => 'feedback-name', 'required' ]) }}
                                         </label>
                                     </div>
                                 </div>
