@@ -1,5 +1,5 @@
 <footer id="site-footer">
-    <div class="site-footer-legal">© {{ date( 'Y' ) }} <a href="#" target="_blank">COSC</a></div>
+    <div class="site-footer-legal">© {{ date( 'Y' ) }} <a href="https://cbitosc.github.io/" target="_blank">COSC</a></div>
     <div class="site-footer-right">
         Crafted with <i class="fa fa-heart"></i> by
         <a href="https://twitter.com/SrkRohith" target="_blank">@SrkRohith</a>,
