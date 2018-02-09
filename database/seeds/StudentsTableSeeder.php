@@ -15,7 +15,14 @@ class StudentsTableSeeder extends Seeder
 	 */
 	public function run()
 	{
+		
+	}
 
+	public function addStudents(){
+
+	}
+
+	public function seedBatches(){
 		foreach (\App\Student::all() as $student){
 			if(preg_match( '/^160116733(\d{3})$/', $student->rollnum, $matches ) ){
 				$arr = range(1, 23);
@@ -185,6 +192,5 @@ class StudentsTableSeeder extends Seeder
 
 			}
 		}
-
 	}
 }
