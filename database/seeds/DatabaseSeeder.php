@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
 //	    $this->call(RolesTableSeeder::class);
 //	     User seeder will use the roles above created.
 //	    $this->call(UsersTableSeeder::class);
-//	    $this->call(StudentsTableSeeder::class);
+	    $this->call(StudentsTableSeeder::class);
 //	    $this->call(StudentEmailSeeder::class);
 
 //		for ($i = 0; $i < 5; $i++){
@@ -240,44 +240,44 @@ class DatabaseSeeder extends Seeder
 //		    }
 //	    }
 
-	    foreach (\App\Employee::all() as $employee){
-	    	$employee->user_id = 0;
-	    	$employee->save();
-	    }
-
-	    foreach (\App\Student::all() as $student){
-		    $student->user_id = 0;
-		    $student->save();
-	    }
-
-	    foreach (\App\Employee::all() as $employee){
-		    $emp_user = $employee->user()->first();
-		    if( empty( $emp_user )){
-			    $emp_user = new User();
-			    $emp_user->password = bcrypt( '123456' );
-			    $emp_user->username = $employee->id;
-			    $emp_user->email = $employee->email;
-			    $emp_user->save();
-			    $employee->user_id = $emp_user->id;
-			    $employee->save();
-			    $role =  Role::find(3);
-			    $emp_user->roles()->attach($role);
-		    }
-	    }
-
-	    foreach (\App\Student::all() as $student){
-	    	if( empty( $student->user()->first() )){
-	    		$std_user = new User();
-	    		$std_user->username = $student->rollnum;
-	    		$std_user->email = $student->email;
-	    		$std_user->password = bcrypt( $student->rollnum );
-	    		$std_user->save();
-	    		$student->user_id = $std_user->id;
-	    		$student->save();
-			    $role =  Role::find(6);
-			    $std_user->roles()->attach($role);
-		    }
-	    }
+//	    foreach (\App\Employee::all() as $employee){
+//	    	$employee->user_id = 0;
+//	    	$employee->save();
+//	    }
+//
+//	    foreach (\App\Student::all() as $student){
+//		    $student->user_id = 0;
+//		    $student->save();
+//	    }
+//
+//	    foreach (\App\Employee::all() as $employee){
+//		    $emp_user = $employee->user()->first();
+//		    if( empty( $emp_user )){
+//			    $emp_user = new User();
+//			    $emp_user->password = bcrypt( '123456' );
+//			    $emp_user->username = $employee->id;
+//			    $emp_user->email = $employee->email;
+//			    $emp_user->save();
+//			    $employee->user_id = $emp_user->id;
+//			    $employee->save();
+//			    $role =  Role::find(3);
+//			    $emp_user->roles()->attach($role);
+//		    }
+//	    }
+//
+//	    foreach (\App\Student::all() as $student){
+//	    	if( empty( $student->user()->first() )){
+//	    		$std_user = new User();
+//	    		$std_user->username = $student->rollnum;
+//	    		$std_user->email = $student->email;
+//	    		$std_user->password = bcrypt( $student->rollnum );
+//	    		$std_user->save();
+//	    		$student->user_id = $std_user->id;
+//	    		$student->save();
+//			    $role =  Role::find(6);
+//			    $std_user->roles()->attach($role);
+//		    }
+//	    }
 
     }
 }

@@ -15,7 +15,33 @@ class StudentsTableSeeder extends Seeder
 	 */
 	public function run()
 	{
-		
+
+		$semester = Semester::find(8);
+		$section1 = $semester->sections->get(0);
+		$batch1 = $section1->batches->get(0)->id;
+		$batch2 = $section1->batches->get(1)->id;
+		$batch3 = $section1->batches->get(2)->id;
+
+		$batches = [
+			$batch1 = array_merge( range( 160114733001, 160114733025 ) ),
+			$batch2 = array_merge( range( 160114733029, 160114733032 ),
+				[ 160114733026, 160114733034, 160114733035 ],
+				range( 160114733037, 160114733047 ), range( 160114733049, 160114733053 ) )
+		];
+
+
+		$students = explode( "\n", file_get_contents( realpath( __DIR__ . '\CSV\RollList44CSE-1.csv' ) ));
+
+		foreach( $students as $i => $student ){
+			if ( $i >= 7 ) {
+				if ( ! empty( $student ) ) {
+					$student_arr = explode( ',', $student );
+					if ( is_array( $student_arr ) ) {
+					    var_dump( $student_arr[1], (float) $student_arr[2], $student_arr[3] );
+					}
+				}
+			}
+		}
 	}
 
 	public function addStudents(){
