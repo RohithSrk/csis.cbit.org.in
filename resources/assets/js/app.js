@@ -37,12 +37,26 @@ require('./bootstrap');
                 siteWrap.addClass('menu-collapsed');
             }
         });
+
+        $('.mb-menu-btn .menu-toggle').click(function(){
+            $('#sidebar').toggleClass('sb-open');
+            $(this).toggleClass('active');
+        });
     }
 
     function init_datepickers() {
         $('.input-group.date').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+    }
+
+    function viewport() {
+        var e = window, a = 'inner';
+        if (!('innerWidth' in window )) {
+            a = 'client';
+            e = document.documentElement || document.body;
+        }
+        return {width: e[a + 'Width'], height: e[a + 'Height']};
     }
 
     /* ---------------------------------------------
@@ -408,6 +422,9 @@ require('./bootstrap');
     });
 
     $(window).resize(function () {
+        if(viewport().width <= 782){
+            $('.site-wrap.dashboard').removeClass('menu-collapsed');
+        }
 
     });
 
