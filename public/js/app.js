@@ -98262,12 +98262,27 @@ __webpack_require__("./resources/assets/js/bootstrap.js");
                 siteWrap.addClass('menu-collapsed');
             }
         });
+
+        $('.mb-menu-btn .menu-toggle').click(function () {
+            $('#sidebar').toggleClass('sb-open');
+            $(this).toggleClass('active');
+        });
     }
 
     function init_datepickers() {
         $('.input-group.date').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+    }
+
+    function viewport() {
+        var e = window,
+            a = 'inner';
+        if (!('innerWidth' in window)) {
+            a = 'client';
+            e = document.documentElement || document.body;
+        }
+        return { width: e[a + 'Width'], height: e[a + 'Height'] };
     }
 
     /* ---------------------------------------------
@@ -98619,7 +98634,11 @@ __webpack_require__("./resources/assets/js/bootstrap.js");
         init_extras();
     });
 
-    $(window).resize(function () {});
+    $(window).resize(function () {
+        if (viewport().width <= 782) {
+            $('.site-wrap.dashboard').removeClass('menu-collapsed');
+        }
+    });
 })(jQuery);
 
 /***/ }),
