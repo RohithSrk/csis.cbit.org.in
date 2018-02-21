@@ -26,7 +26,7 @@
                             <span class="user-name">Welcome, {{ auth()->user()->employee()->first()->name }}</span>
                         @endif
                         <span class="avatar avatar-online">
-                            <img width="40" src="http://blog.springfield.k12.or.us/yolanda/files/2009/02/person-placeholder-5.png" alt="avatar">
+                            <img width="40" src="/images/profile-pic.png" alt="avatar">
                         </span>
                         <span><i class="fa fa-angle-down"></i></span>
                     </a>
