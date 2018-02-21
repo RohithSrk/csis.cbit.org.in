@@ -86,6 +86,9 @@ Route::post('/anonymous-feedback', 'FeedbackUserController@store' )
 Route::get( '/exam/create', 'ExamController@create' );
 Route::post( '/exam/create', 'ExamController@store' );
 
+Route::get('/exam/add-qustion-paper', 'QuestionPaperController@index');
+Route::post('/exam/add-qustion-paper', 'QuestionPaperController@create');
+Route::put('/exam/add-qustion-paper', 'QuestionPaperController@store');
 
 
 // Ajax Routes.

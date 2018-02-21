@@ -49,7 +49,7 @@
                         class="menu-title">Manage Feedback Data</span></a>
         </li>
         @endif
-        @if(auth()->user()->hasAnyRole(['Editor']))
+        @if(auth()->user()->hasRole( 'Editor' ))
         <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
             <a href="{{ action('ExamController@create') }}"><i class="fa fa-plus"></i><span
                         class="menu-title">Create Mid Exam</span></a>
@@ -57,7 +57,7 @@
         @endif
         @if(auth()->user()->hasAnyRole(['Editor']))
         <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
-            <a href="{{ action('ExamController@create') }}"><i class="fa fa-plus"></i><span
+            <a href="{{ action('QuestionPaperController@index') }}"><i class="fa fa-plus"></i><span
                         class="menu-title">Add Question Paper</span></a>
         </li>
         @endif
