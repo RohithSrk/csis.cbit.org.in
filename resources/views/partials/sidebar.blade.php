@@ -49,6 +49,30 @@
                         class="menu-title">Manage Feedback Data</span></a>
         </li>
         @endif
+        @if(auth()->user()->hasAnyRole(['Editor']))
+        <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
+            <a href="{{ action('ExamController@create') }}"><i class="fa fa-plus"></i><span
+                        class="menu-title">Create Mid Exam</span></a>
+        </li>
+        @endif
+        @if(auth()->user()->hasAnyRole(['Editor']))
+        <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
+            <a href="{{ action('ExamController@create') }}"><i class="fa fa-plus"></i><span
+                        class="menu-title">Add Question Paper</span></a>
+        </li>
+        @endif
+        @if(auth()->user()->hasAnyRole(['Editor']))
+        <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
+            <a href="{{ action('ExamController@create') }}"><i class="fa fa-list"></i><span
+                        class="menu-title">Add Mid Marks</span></a>
+        </li>
+        @endif
+        @if(auth()->user()->hasAnyRole(['Editor']))
+        <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
+            <a href="{{ action('ExamController@create') }}"><i class="fa fa-list-alt"></i><span
+                        class="menu-title">View Mid Marks</span></a>
+        </li>
+        @endif
         <li class="menu-item hidden">
             <a href="#"><i class="fa fa-calendar-o"></i><span class="menu-title">Events</span></a>
         </li>

@@ -81,6 +81,13 @@ Route::get('/anonymous-feedback', 'FeedbackUserController@index' )
 Route::post('/anonymous-feedback', 'FeedbackUserController@store' )
        ->name('feedback-user.dashboard');
 
+// Mid Marks
+
+Route::get( '/exam/create', 'ExamController@create' );
+Route::post( '/exam/create', 'ExamController@store' );
+
+
+
 // Ajax Routes.
 
 Route::get( '/subjects/{subject}/get-sections', 'AjaxController@getSubjectSections' );
