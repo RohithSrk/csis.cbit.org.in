@@ -86,10 +86,13 @@ Route::post('/anonymous-feedback', 'FeedbackUserController@store' )
 Route::get( '/exam/create', 'ExamController@create' );
 Route::post( '/exam/create', 'ExamController@store' );
 
-Route::get('/exam/add-qustion-paper', 'QuestionPaperController@index');
-Route::post('/exam/add-qustion-paper', 'QuestionPaperController@create');
-Route::put('/exam/add-qustion-paper', 'QuestionPaperController@store');
+Route::get('/exam/add-question-paper', 'QuestionPaperController@index');
+Route::post('/exam/add-question-paper', 'QuestionPaperController@create');
+Route::put('/exam/add-question-paper', 'QuestionPaperController@store');
 
+Route::get('/exam/add-marks', 'ExamMarksController@index');
+Route::post('/exam/add-marks', 'ExamMarksController@create');
+Route::put('/exam/add-marks', 'ExamMarksController@store');
 
 // Ajax Routes.
 
@@ -105,6 +108,7 @@ Route::bind('rollnum', function($value) {
 });
 
 Route::get( '/semesters/{semester}/get-subjects', 'AjaxController@getSemesterSubjects' );
+Route::get( '/semesters/{semester}/get-theory-subjects', 'AjaxController@getSemesterTheorySubjects' );
 Route::get( '/semesters/{semester}/get-sections', 'AjaxController@getSemesterSections' );
 Route::get( '/sections/{section}/subjects/{subject}/get-faculty', 'AjaxController@getSubjectFaculty' );
 Route::get( '/faculty/{employee}/get-subjects', 'AjaxController@getFacultySubjects' );

@@ -8,7 +8,7 @@
 
             @if( ! empty( $exams_arr ) )
                 <div class="page-header">
-                    <h1 class="page-title">Add Mid Exam Question Paper</h1>
+                    <h1 class="page-title">Add Mid Exam Question Paper Template</h1>
                 </div>
 
                 <!-- .page-header -->
@@ -58,6 +58,96 @@
                                         </div>
                                     </div>
 
+                                    <div class="col-lg-12">
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-lg-6">
+                                        <div class="section">
+                                            <label for="question-paper-name" class="field-label">Question Paper Name</label>
+                                            <label for="question-paper-name" class="field">
+                                                {{  Form::text("question-paper-name", $questionPaperName ?? '', [
+                                                    'class' => 'form-control select',
+                                                    'id' => 'question-paper-name' ]) }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="section">
+                                            <label for="date" class="field-label">Select Date</label>
+                                            <label for="date" class="field">
+                                                <div class="input-group date ">
+                                                <span class="input-group-addon cursor">
+                                                    <i class="fa fa-calendar"></i>
+                                                </span>
+                                                    <input type="text" id="date" name="date" value=""
+                                                           class="form-control gui-input datetimepicker" placeholder="dd/mm/yyyy">
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-lg-3">
+                                        <div class="section">
+                                            <label for="max-marks" class="field-label">Max Marks</label>
+                                            <label for="max-marks" class="field">
+                                                {{  Form::number("max-marks", $maxMarks ?? 20, [
+                                                    'class' => 'form-control select',
+                                                    'id' => 'max-marks', 'min' => 0 ]) }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <hr>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="section">
+                                            <label for="max_questions_part-1" class="field-label">Max No. of Questions in Part A</label>
+                                            <label for="max_questions_part-1" class="field">
+                                                {{  Form::number("parts[1][max_questions]", $parts[1]['max_questions'] ?? 3, [
+                                                    'class' => 'form-control select',
+                                                    'id' => 'rollnum', 'min' => 0 ]) }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="section">
+                                            <label for="questions_to_attempt_part-1" class="field-label">Questions to Attempt in Part A</label>
+                                            <label for="questions_to_attempt_part-1" class="field">
+                                                {{  Form::number("parts[1][questions_to_attempt]",  $parts[1]['questions_to_attempt']  ?? 3, [
+                                                    'class' => 'form-control select',
+                                                    'id' => 'rollnum', 'min' => 0 ]) }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="section">
+                                            <label for="max_questions_part-2" class="field-label">Max No. of Questions in Part B</label>
+                                            <label for="max_questions_part-2" class="field">
+                                                {{  Form::number("parts[2][max_questions]", $parts[2]['max_questions'] ?? 3, [
+                                                    'class' => 'form-control select',
+                                                    'id' => 'rollnum', 'min' => 0 ]) }}
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-3">
+                                        <div class="section">
+                                            <label for="questions_to_attempt_part-2" class="field-label">Questions to Attempt in Part B</label>
+                                            <label for="questions_to_attempt_part-2" class="field">
+                                                {{  Form::number("parts[2][questions_to_attempt]", $parts[2]['questions_to_attempt'] ?? 2, [
+                                                    'class' => 'form-control select',
+                                                    'id' => 'rollnum', 'min' => 0 ]) }}
+                                            </label>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="panel-footer admin-form" align="right">
                                     <input type="submit" class="btn btn-sm btn-primary" value="Get Template">
@@ -67,72 +157,88 @@
                         </div><!-- .col-lg-12 -->
                     </div><!-- .row -->
 
-                    @if( ! empty( $labMarkTypes ) )
+                    @if( ! empty( $parts ) )
 
                         <div class="row">
                             <div class="col-lg-9">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title">Lab Mark Types for {{ $subject->name }}</h4>
+                                        <h4 class="panel-title">{{ $exams_arr[ $exam_id ] }} - Question Paper Template for {{ $subjects_arr[ $subject_id ] }}</h4>
                                     </div>
-                                    {{ Form::open(array('action' => 'LabMarkTypesController@store', 'method' => 'put')) }}
-                                    {{ Form::hidden('subject', $subject_id) }}
-
+                                    {{ Form::open(array('action' => 'QuestionPaperController@store', 'method' => 'put')) }}
 
                                     <div class="panel-body marks-table">
                                         <div class="table-responsive">
+                                            <div class="col-lg-12">
+                                                <h2>Part A Questions</h2>
+                                            </div>
                                             <table class="table table-bordered mb-0 th-bb-n">
                                                 <thead>
-                                                <tr>
-                                                    <th>Id</th>
-                                                    <th>Name</th>
-                                                    <th>Max Marks</th>
-                                                    <th></th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="lab-mark-types">
-                                                @php
-                                                    $lmt_i = 1;
-                                                @endphp
-                                                @foreach( $labMarkTypes as $labMarkType )
                                                     <tr>
-                                                        <td class="width-50">{{ $lmt_i }}</td>
-                                                        <td class="">
-                                                            {{Form::text( 'labMarkType[' . $lmt_i . '][]'  , $labMarkType->name,
-                                                              array('class' => 'form-control'))}}
+                                                        <th>#</th>
+                                                        <th>Question</th>
+                                                        <th>Max Marks</th>
+                                                        <th>Sub Question</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                @for( $i = 1; $i <= $parts[1]['max_questions']; $i++ )
+                                                    <tr>
+                                                        <td>{{ $i }}</td>
+                                                        <td>
+                                                            {{ Form::text( "questions[1][{$i}][question]"  , '',
+                                                            array('class' => 'form-control')) }}
                                                         </td>
                                                         <td class="width-100">
-                                                            {{Form::number( 'labMarkType[' . $lmt_i . '][]'  , $labMarkType->max_marks,
+                                                            {{Form::number(  "questions[1][{$i}][max_marks]"  , '',
                                                               array('class' => 'form-control'))}}
                                                         </td>
-                                                        <td class="width-100">
-                                                            <button class="btn btn-sm btn-default remove-mark-type">Remove</button>
+                                                        <td class="width-150">
+                                                            <button class="btn btn-sm btn-default remove-mark-type">Add Sub Question</button>
                                                         </td>
                                                     </tr>
-                                                    @php
-                                                        $lmt_i++;
-                                                    @endphp
-                                                @endforeach
-                                                <tr>
-                                                    <td class="width-50">{{ $lmt_i }}</td>
-                                                    <td class="">
-                                                        {{Form::text( 'labMarkType[' . $lmt_i . '][]'  , '',
-                                                          array('class' => 'form-control'))}}
-                                                    </td>
-                                                    <td class="width-100">
-                                                        {{Form::number( 'labMarkType[' . $lmt_i . '][]'  , '',
-                                                          array('class' => 'form-control'))}}
-                                                    </td>
-                                                    <td class="width-100">
-                                                        <button class="btn btn-sm btn-default remove-mark-type">Remove</button>
-                                                    </td>
-                                                </tr>
+                                                @endfor
+
+                                                    <tr>
+                                                        <td>1.1</td>
+                                                        <td>
+                                                            {{ Form::text( "questions[1][1][sub_questions][1][question]"  , '',
+                                                            array('class' => 'form-control')) }}
+                                                        </td>
+                                                        <td class="width-100">
+                                                            {{Form::number(  "questions[1][1][sub_questions][1][max_marks]"  , '',
+                                                              array('class' => 'form-control'))}}
+                                                        </td>
+                                                        <td class="width-150">
+                                                            <button class="btn btn-sm btn-default remove-mark-type">Remove Question</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                            <div class="col-lg-12">
+                                                <h2>Part B Questions</h2>
+                                            </div>
+                                            <table class="table table-bordered mb-0 th-bb-n">
+                                                <tbody>
+                                                @for( $j = $i; $j <= ($parts[2]['max_questions'] + $i-1); $j++ )
+                                                    <tr>
+                                                        <td>{{ $j }}</td>
+                                                        <td>
+                                                            {{ Form::text( "questions[2][{$j}][question]"  , '',
+                                                            array('class' => 'form-control' )) }}
+                                                        </td>
+                                                        <td class="width-100">
+                                                            {{ Form::number(  "questions[2][{$j}][max_marks]"  , '',
+                                                              array('class' => 'form-control' )) }}
+                                                        </td>
+                                                        <td class="width-150">
+                                                            <button class="btn btn-sm btn-default remove-mark-type">Add Sub Question</button>
+                                                        </td>
+                                                    </tr>
+                                                @endfor
                                                 </tbody>
                                             </table>
                                         </div><!-- .table-responsive -->
-                                    </div>
-                                    <div class="" style="padding: 15px;">
-                                        <button class="btn btn-sm btn-default add-mark-type">Add Mark Type</button>
                                     </div>
                                     <div class="panel-footer admin-form" align="right">
                                         <input type="submit" class="btn btn-sm btn-primary" value="Submit">
@@ -144,6 +250,11 @@
                     @endif
 
                 </div><!-- .page-content -->
+            @else
+                <div class="alert alert-danger mg-top-15 text-left">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">×</a>
+                    No Exams available. Please create an exam by clicking <a href="{{ action('ExamController@create') }}">here</a>
+                </div>
             @endif
 
         </div>

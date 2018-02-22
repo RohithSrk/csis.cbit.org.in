@@ -50,7 +50,7 @@
         </li>
         @endif
         @if(auth()->user()->hasRole( 'Editor' ))
-        <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
+        <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }} hidden">
             <a href="{{ action('ExamController@create') }}"><i class="fa fa-plus"></i><span
                         class="menu-title">Create Mid Exam</span></a>
         </li>
@@ -62,8 +62,8 @@
         </li>
         @endif
         @if(auth()->user()->hasAnyRole(['Editor']))
-        <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
-            <a href="{{ action('ExamController@create') }}"><i class="fa fa-list"></i><span
+        <li class="menu-item {{ (request()->is('exam/add-marks')) ? 'active' : '' }}">
+            <a href="{{ action('ExamMarksController@index') }}"><i class="fa fa-list"></i><span
                         class="menu-title">Add Mid Marks</span></a>
         </li>
         @endif

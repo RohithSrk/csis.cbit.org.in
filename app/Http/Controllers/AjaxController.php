@@ -53,6 +53,10 @@ class AjaxController extends Controller
 		return $semester->subjects()->get();
 	}
 
+	public function getSemesterTheorySubjects(Semester $semester){
+		return $semester->subjects()->where('type', 'theory')->get();
+	}
+
 	public function getSubjectFaculty(Section $section, Subject $subject){
 		return $subject->getAssignedFacultyNames($section->id);
 	}

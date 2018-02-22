@@ -441,7 +441,7 @@ table.th-bb-n thead tr:first-child td {
     display: none !important;
 }
 
-.menu-collapsed #site-navbar img {
+.menu-collapsed #site-navbar .logo img {
     width: 30px;
 }
 

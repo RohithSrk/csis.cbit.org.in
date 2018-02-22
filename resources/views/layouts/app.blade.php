@@ -259,6 +259,12 @@ Crafted with love by @SrkRohith, @ramlmn, @harshatech
 
         }
 
+        @media only screen and (max-width: 420px){
+            .page {
+                min-height: calc(100% - 98px);
+            }
+        }
+
         @media only screen and (max-width: 359px) {
 
         }

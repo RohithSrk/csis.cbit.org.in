@@ -215,13 +215,23 @@ require('./bootstrap');
             select_semester.change(function(e){
                 var semesterId = $(this).val();
 
-                $.get( '/semesters/'+ semesterId +'/get-subjects', function(data){
-                    select_subject.empty();
-                    $.each(data, function() {
-                        select_subject.append('<option value="' + this.id + '">' + this.name + ' (' + this.code + ') </option>');
+                if( /exam\/add-question-paper/.test(window.location.href) ){
+                    $.get( '/semesters/'+ semesterId +'/get-theory-subjects', function(data){
+                        select_subject.empty();
+                        $.each(data, function() {
+                            select_subject.append('<option value="' + this.id + '">' + this.name + ' (' + this.code + ') </option>');
+                        });
+                        select_subject.trigger('change');
                     });
-                    select_subject.trigger('change');
-                });
+                } else {
+                    $.get( '/semesters/'+ semesterId +'/get-subjects', function(data){
+                        select_subject.empty();
+                        $.each(data, function() {
+                            select_subject.append('<option value="' + this.id + '">' + this.name + ' (' + this.code + ') </option>');
+                        });
+                        select_subject.trigger('change');
+                    });
+                }
 
                 $.get( '/semesters/'+ semesterId +'/get-sections', function(data){
                     select_section.empty();
