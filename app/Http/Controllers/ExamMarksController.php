@@ -3,23 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Exam;
+use App\ExamMark;
+use App\QuestionPaper;
+use App\Semester;
 use Illuminate\Http\Request;
 
-class ExamController extends Controller
+class ExamMarksController extends Controller
 {
-	public function __construct() {
-		$this->middleware('auth');
-	}
-
-
-	/**
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $title = 'Add Mid Exam Marks';
+
+	    $qp_arr = QuestionPaper::all()->pluck('name', 'id')->toArray();
+	    $semesters_arr = Semester::all()->pluck( 'name', 'id' )->toArray();
+	    $sections_arr = Semester::find(4)->sections->pluck('name', 'id')->toArray();
+
+    	return view( 'layouts.add-exam-marks', compact( 'title', 'qp_arr', 'sections_arr', 'semesters_arr' ) );
     }
 
     /**
@@ -27,9 +31,9 @@ class ExamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-
+        dd($request->all());
     }
 
     /**
@@ -46,10 +50,10 @@ class ExamController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Exam  $exam
+     * @param  \App\ExamMark  $examMark
      * @return \Illuminate\Http\Response
      */
-    public function show(Exam $exam)
+    public function show(ExamMark $examMark)
     {
         //
     }
@@ -57,10 +61,10 @@ class ExamController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Exam  $exam
+     * @param  \App\ExamMark  $examMark
      * @return \Illuminate\Http\Response
      */
-    public function edit(Exam $exam)
+    public function edit(ExamMark $examMark)
     {
         //
     }
@@ -69,10 +73,10 @@ class ExamController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Exam  $exam
+     * @param  \App\ExamMark  $examMark
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Exam $exam)
+    public function update(Request $request, ExamMark $examMark)
     {
         //
     }
@@ -80,10 +84,10 @@ class ExamController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Exam  $exam
+     * @param  \App\ExamMark  $examMark
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Exam $exam)
+    public function destroy(ExamMark $examMark)
     {
         //
     }
