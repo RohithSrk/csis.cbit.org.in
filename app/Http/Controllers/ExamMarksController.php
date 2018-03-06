@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Exam;
 use App\ExamMark;
+use App\Section;
+use App\ExamQuestion;
 use App\QuestionPaper;
 use App\Semester;
 use Illuminate\Http\Request;
@@ -33,7 +35,19 @@ class ExamMarksController extends Controller
      */
     public function create(Request $request)
     {
-        dd($request->all());
+        $semester_id = $request->get('semester');
+        $section_id = $request->get('section');
+        $qp_id = $request->get('question-paper');
+
+	    $semesters_arr = Semester::all()->pluck( 'name', 'id' )->toArray();
+	    $sections_arr = Semester::find(4)->sections->pluck('name', 'id')->toArray();
+	    $qp_arr = QuestionPaper::all()->pluck('name', 'id')->toArray();
+
+	    $questions = ExamQuestion::where('question_paper_id', $qp_id)->get();
+		$students = Section::find($section_id)->students()->get();
+
+    	return view( 'layouts.add-exam-marks', compact( 'title', 'qp_arr', 'sections_arr', 'section_id' ,
+		    'semesters_arr', 'section_id', 'questions', 'students', 'qp_id' ) );
     }
 
     /**
@@ -44,7 +58,7 @@ class ExamMarksController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request->all());
     }
 
     /**

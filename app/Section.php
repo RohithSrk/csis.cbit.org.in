@@ -10,6 +10,11 @@ class Section extends Model
     	return $this->hasMany(Batch::class);
     }
 
+    public function students(){
+    	$batch_ids_arr = $this->batches()->pluck('id')->toArray();
+	    return Student::whereIn('batch_id', $batch_ids_arr);
+    }
+
 //    public function year(){
 //    	return $this->belongsTo(Year::class);
 //    }

@@ -72,14 +72,11 @@
                             <div class="col-lg-12">
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <h4 class="panel-title">Student Lab Marks for {{ $date }} ( {{ $lab_weeks[ $lab_week_id ] }} )</h4>
+                                        <h4 class="panel-title">Student Exam Marks for ( {{ $qp_arr[ $qp_id ] }} )</h4>
                                     </div>
-                                    {{ Form::open(array('action' => 'LabMarksController@store', 'method' => 'put')) }}
-                                    {{ Form::hidden('date', $date) }}
-                                    {{ Form::hidden('subject', $subject_id) }}
-                                    {{ Form::hidden('batch', $batch_id) }}
+                                    {{ Form::open(array('action' => 'ExamMarksController@store', 'method' => 'put')) }}
+                                    {{ Form::hidden('question-paper', $qp_id) }}
                                     {{ Form::hidden('section', $section_id) }}
-                                    {{ Form::hidden('labweek', $lab_week_id) }}
 
                                     <div class="panel-body marks-table">
                                         <div class="table-responsive">
@@ -88,41 +85,39 @@
                                                 <tr>
                                                     <th>Roll Number</th>
                                                     <th>Name</th>
-                                                    @foreach( $mark_types as $mark_type )
-                                                        <th>{{ $mark_type['name'] }}</th>
+                                                    @foreach( $questions as $question )
+                                                        <th>{{ $question->question }}</th>
+                                                        @if( $question->subQuestions()->count() )
+                                                            @foreach( $question->subQuestions()->get() as $squestion )
+                                                                <th>{{ $squestion->question }}</th>
+                                                            @endforeach
+                                                        @endif
                                                     @endforeach
+
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                @foreach( $students as $student )
-                                                    <tr>
-                                                        <td class="width-150">{{ $student->rollnum }}</td>
-                                                        <td>{{ strtoupper($student->name) }}</td>
-
-                                                        @php
-                                                            $stdLabMarks = $student->getLabMarks( $subject_id, $date_formatted );
-                                                        @endphp
-
-                                                        @foreach( $mark_types as $mark_type )
-                                                            @if(strtolower($mark_type['name']) == 'attendance')
-                                                                <td class="width-150">
-                                                                    {{  Form::select('attendance', [ $mark_type['max_marks'] => 'Present', 0 => 'Absent' ],
-                                                                        $stdLabMarks[ $mark_type['name'] ]?? $mark_type['max_marks'] ,
-                                                                        ['class' => 'form-control attendance select' ]) }}
-                                                                    {{Form::number( 'marks[' . $student->rollnum . '][' . $mark_type['name'] . ']',
-                                                                      $mark_type['max_marks'],
-                                                                      array('min' => 0, 'max' => $mark_type['max_marks'], 'class' => 'form-control hidden'))}}
+                                                    @foreach( $students as $student )
+                                                        <tr>
+                                                            <td class="width-100">{{ $student->rollnum }}</td>
+                                                            <td>{{ strtoupper($student->name) }}</td>
+                                                            @foreach( $questions as $question )
+                                                                <td style="width: 75px">
+                                                                    {{Form::number( 'emarks[' . $student->rollnum . '][' . $question->id . ']',
+                                                                      0,
+                                                                      array('min' => 0, 'max' => $question->max_marks, 'class' => 'form-control'))}}
                                                                 </td>
-                                                            @else
-                                                                <td class="width-150">
-                                                                {{Form::number( 'marks[' . $student->rollnum . '][' . $mark_type['name'] . ']'  ,
-                                                                  $stdLabMarks[ $mark_type['name'] ] ?? '',
-                                                                  array('min' => 0, 'max' => $mark_type['max_marks'], 'class' => 'form-control', 'required'))}}
-                                                                </td>
-                                                            @endif
-                                                        @endforeach
-                                                    </tr>
-                                                @endforeach
+                                                                @if( $question->subQuestions()->count() )
+                                                                    @foreach( $question->subQuestions()->get() as $squestion )
+                                                                        <td style="width: 75px">
+                                                                        {{Form::number( 'emarks[' . $student->rollnum . ']['. $question->id .'][subquestion][' . $squestion->id . ']', 0,
+                                                                          array('min' => 0, 'max' => $squestion->max_marks, 'class' => 'form-control'))}}
+                                                                        </td>
+                                                                    @endforeach
+                                                                @endif
+                                                            @endforeach
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div><!-- .table-responsive -->
