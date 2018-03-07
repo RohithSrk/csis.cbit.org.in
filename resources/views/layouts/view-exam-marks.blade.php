@@ -8,7 +8,7 @@
 
             @if( ! empty( $qp_arr ) )
                 <div class="page-header">
-                    <h1 class="page-title ">Add Mid Exam Marks</h1>
+                    <h1 class="page-title ">View Mid Exam Marks</h1>
                 </div>
 
                 <!-- .page-header -->
@@ -20,7 +20,7 @@
                                 <div class="panel-heading">
                                     <h4 class="panel-title">Select Students & Exam</h4>
                                 </div>
-                                <form class="form-horizontal" action="/exam/add-marks" method="post">
+                                <form class="form-horizontal" action="/exam/view-marks" method="post">
 
                                     {{ csrf_field() }}
 
@@ -59,7 +59,7 @@
                                         </div>
                                     </div>
                                     <div class="panel-footer admin-form" align="right">
-                                        <input type="submit" class="btn btn-sm btn-primary" value="Get Students">
+                                        <input type="submit" class="btn btn-sm btn-primary" value="Get Marks">
                                     </div>
                                 </form>
                             </div>

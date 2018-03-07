@@ -68,8 +68,8 @@
         </li>
         @endif
         @if(auth()->user()->hasAnyRole(['Editor']))
-        <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
-            <a href="{{ action('ExamController@show') }}"><i class="fa fa-list-alt"></i><span
+        <li class="menu-item {{ (request()->is('exam/view-marks')) ? 'active' : '' }}">
+            <a href="{{ action('ExamMarksController@showSelectionForm') }}"><i class="fa fa-list-alt"></i><span
                         class="menu-title">View Mid Marks</span></a>
         </li>
         @endif
