@@ -8,7 +8,7 @@
         </div>
         <div class="logo font-1">
             <img src="{{asset('images/logo.png')}}" width="100" alt="CBIT Logo">
-            <span class="logo-text" style="display: inline-block">CBIT Student Info.</span>
+            <span class="logo-text" style="display: inline-block">CBIT Student Info</span>
         </div><!-- .logo -->
     </div><!-- .header -->
     <div class="navbar-container collapse navbar-collapse container-fluid clearfix" id="navbar">

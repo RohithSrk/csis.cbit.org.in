@@ -69,22 +69,10 @@
         @endif
         @if(auth()->user()->hasAnyRole(['Editor']))
         <li class="menu-item {{ (request()->is('exam/create')) ? 'active' : '' }}">
-            <a href="{{ action('ExamController@create') }}"><i class="fa fa-list-alt"></i><span
+            <a href="{{ action('ExamController@show') }}"><i class="fa fa-list-alt"></i><span
                         class="menu-title">View Mid Marks</span></a>
         </li>
         @endif
-        <li class="menu-item hidden">
-            <a href="#"><i class="fa fa-calendar-o"></i><span class="menu-title">Events</span></a>
-        </li>
-        <li class="menu-item hidden">
-            <a href="#"><i class="fa fa-calendar-o"></i><span class="menu-title">Add/Update Event</span></a>
-        </li>
-        <li class="menu-item hidden">
-            <a href="{{ URL::to('logout') }}"><i class="fa fa-sign-out"></i><span class="menu-title">Logout</span></a>
-        </li>
-        <li class="menu-item hidden">
-            <a href="#"><i class="fa fa-info-circle"></i><span class="menu-title">About</span></a>
-        </li>
     </ul>
 
 </aside><!-- #sidebar -->

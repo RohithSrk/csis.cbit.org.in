@@ -15,6 +15,10 @@ class CreateExamMarksTable extends Migration
     {
         Schema::create('exam_marks', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('student_id');
+            $table->integer('sub_question_id')->nullable();
+            $table->integer('question_id')->nullable();
+            $table->float('marks_scored');
             $table->timestamps();
         });
     }

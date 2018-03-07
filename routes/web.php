@@ -94,6 +94,9 @@ Route::get('/exam/add-marks', 'ExamMarksController@index');
 Route::post('/exam/add-marks', 'ExamMarksController@create');
 Route::put('/exam/add-marks', 'ExamMarksController@store');
 
+Route::get('/exam/view-marks', 'ExamMarksController@showSelectionForm');
+Route::post('/exam/view-marks', 'ExamMarksController@showMarks');
+
 // Ajax Routes.
 
 Route::get( '/subjects/{subject}/get-sections', 'AjaxController@getSubjectSections' );

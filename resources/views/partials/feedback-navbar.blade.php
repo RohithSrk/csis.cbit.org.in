@@ -3,7 +3,7 @@
         <div class="logo font-1">
             <h1>CBIT Anonymous Feedback System</h1>
             <img src="{{asset('images/logo.png')}}" width="100" alt="CBIT Logo">
-            <span class="logo-text" style="display: inline-block">CBIT Student Info.</span>
+            <span class="logo-text" style="display: inline-block">CBIT Student Info</span>
         </div><!-- .logo -->
     </div><!-- .header -->
     <div class="navbar-container container-fluid clearfix">
