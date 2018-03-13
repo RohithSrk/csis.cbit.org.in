@@ -144,7 +144,6 @@ class ExamMarksController extends Controller
      */
     public function show(ExamMark $examMark)
     {
-        //
     }
 
 
