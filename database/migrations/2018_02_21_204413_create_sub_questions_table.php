@@ -16,7 +16,7 @@ class CreateSubQuestionsTable extends Migration
         Schema::create('sub_questions', function (Blueprint $table) {
             $table->increments('id');
             $table->text('question');
-            $table->integer('max_marks');
+            $table->float('max_marks');
             $table->integer('exam_question_id');
             $table->text('co');
             $table->timestamps();
