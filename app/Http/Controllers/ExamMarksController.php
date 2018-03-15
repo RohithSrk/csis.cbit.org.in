@@ -23,13 +23,14 @@ class ExamMarksController extends Controller
      */
     public function index()
     {
+	    auth()->user()->authorizeRoles( [ 'Editor' ] );
         $title = 'Add Mid Exam Marks';
 
         //TODO: Get Question Papers by semester.
 
 	    $qp_arr = QuestionPaper::all()->pluck('name', 'id')->toArray();
 	    $semesters_arr = Semester::all()->pluck( 'name', 'id' )->toArray();
-	    $sections_arr = Semester::find(4)->sections->pluck('name', 'id')->toArray();
+	    $sections_arr = Semester::find(1)->sections->pluck('name', 'id')->toArray();
 
     	return view( 'layouts.add-exam-marks', compact( 'title', 'qp_arr', 'sections_arr', 'semesters_arr' ) );
     }
@@ -64,12 +65,17 @@ class ExamMarksController extends Controller
      */
     public function store(Request $request)
     {
-	    $semester_id = $request->get( 'semester' );
-	    $section_id  = $request->get( 'section' );
-	    $qp_id       = $request->get( 'question-paper' );
-	    $stds_emarks      = $request->get( 'emarks' );
+	    $semester_id   = $request->get( 'semester' );
+	    $section_id    = $request->get( 'section' );
+	    $qp_id         = $request->get( 'question-paper' );
+	    $stds_emarks   = $request->get( 'emarks' );
+	    $questionPaper = QuestionPaper::find( $qp_id );
+	    $question_ids  = $questionPaper->questions()->pluck( 'id' )->toArray();
 
 	    foreach ($stds_emarks as $std_id => $std_emarks){
+
+		    ExamMark::where('student_id', $std_id)->whereIN('question_id', $question_ids)->delete();
+
 	    	foreach ($std_emarks as $qid => $emarks){
 	    		if( is_array( $emarks ) ){
 	    			foreach ( $emarks as $sq_id => $sq_emark ){
@@ -89,8 +95,6 @@ class ExamMarksController extends Controller
 				    $em->save();
 			    }
 		    }
-
-		    break;
 	    }
 
 	    session()->flash( 'success', "Marks submitted successfully." );
@@ -108,13 +112,14 @@ class ExamMarksController extends Controller
 
 	public function showSelectionForm()
 	{
+		auth()->user()->authorizeRoles( [ 'Editor' ] );
 		$title = 'View Mid Exam Marks';
 
 		//TODO: Get Question Papers by semester.
 
 		$qp_arr = QuestionPaper::all()->pluck('name', 'id')->toArray();
 		$semesters_arr = Semester::all()->pluck( 'name', 'id' )->toArray();
-		$sections_arr = Semester::find(4)->sections->pluck('name', 'id')->toArray();
+		$sections_arr = Semester::find(1)->sections->pluck('name', 'id')->toArray();
 
 		return view( 'layouts.view-exam-marks', compact( 'title', 'qp_arr', 'sections_arr', 'semesters_arr' ) );
 	}
@@ -142,8 +147,16 @@ class ExamMarksController extends Controller
      * @param  \App\ExamMark  $examMark
      * @return \Illuminate\Http\Response
      */
-    public function show(ExamMark $examMark)
+    public function show()
     {
+	    auth()->user()->authorizeRoles( [ 'Student' ] );
+
+	    $title = 'Mid Exam Marks';
+	    $exams = Exam::all();
+	    $student_id = auth()->user()->student()->first()->id;
+	    $subject_ids = auth()->user()->student()->first()->getSemester()->subjects->where('type', 'theory')->pluck('id')->toArray();
+
+		return view('layouts.student-view-exam-marks', compact( 'title', 'exams', 'subject_ids', 'student_id' ));
     }
 
 

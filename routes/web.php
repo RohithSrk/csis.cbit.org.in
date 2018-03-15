@@ -94,6 +94,8 @@ Route::get('/exam/add-marks', 'ExamMarksController@index');
 Route::post('/exam/add-marks', 'ExamMarksController@create');
 Route::put('/exam/add-marks', 'ExamMarksController@store');
 
+Route::get( '/student/view-exam-marks', 'ExamMarksController@show' );
+
 Route::get('/exam/view-marks', 'ExamMarksController@showSelectionForm');
 Route::post('/exam/view-marks', 'ExamMarksController@showMarks');
 

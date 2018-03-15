@@ -38,4 +38,12 @@ class Student extends Model
 
 		return $avg;
 	}
+
+	public function examMarks(){
+		return $this->hasMany(ExamMark::class);
+	}
+
+	public function getSemester(){
+		return $this->batch->section->semester;
+	}
 }

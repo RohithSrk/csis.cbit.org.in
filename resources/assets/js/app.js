@@ -333,6 +333,33 @@ require('./bootstrap');
 
     }
 
+    function init_manageSubQuestions() {
+        var questions = $('#qp-questions');
+
+        questions.delegate('.remove-sub-question', 'click', function(e){
+            e.preventDefault();
+            $(this).closest('tr').remove();
+        });
+
+        $('.add-sub-question').on('click', function(e){
+            e.preventDefault();
+
+            var thisTr = $(this).closest('tr');
+
+            var sqi = thisTr.data('sq');
+            thisTr.data('sq', sqi + 0.1 );
+            sqi = thisTr.data('sq').toFixed(1);
+
+            var $sqTr = $('<tr> <td>'+ sqi +'</td> <td> ' +
+            '<input class="form-control" name="questions['+ thisTr.data('part') +']['+ sqi.toString().split('.')[0] +'][sub_questions]['+ sqi.toString().split('.')[1] +'][question]" type="text" value="Q'+ sqi +'" required> </td> ' +
+                '<td class="width-100"> <input class="form-control" name="questions['+ thisTr.data('part') +'][' + sqi.toString().split('.')[0] + '][sub_questions]['+  sqi.toString().split('.')[1] +'][max_marks]" type="number" value="" required step="0.5"> </td> </tr>' );
+                // '<td class="width-150"> <button class="btn btn-sm btn-default remove-sub-question">Remove Question</button> </td> </tr>');
+
+            thisTr.after($sqTr);
+        });
+
+    }
+
     function init_calenderWidget(){
         $(document).ready(function () {
             $("#dashboard-calendar").zabuto_calendar({
@@ -425,6 +452,7 @@ require('./bootstrap');
         init_ajax();
         init_charts();
         init_manageLabMarkTypes();
+        init_manageSubQuestions();
         init_calenderWidget();
         init_dataTables();
         init_extras();

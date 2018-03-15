@@ -95,29 +95,27 @@
                                                             <th>{{ $question->question }}</th>
                                                         @endif
                                                     @endforeach
-
+                                                    <th>Total Marks</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach( $students as $student )
+                                                        @php
+                                                            $emarks = \App\ExamMark::getMarks( $student->id, $qp_id );
+                                                        @endphp
                                                         <tr>
                                                             <td class="width-100">{{ $student->rollnum }}</td>
                                                             <td>{{ strtoupper($student->name) }}</td>
                                                             @foreach( $questions as $question )
                                                                 @if( $question->subQuestions()->count() )
                                                                     @foreach( $question->subQuestions()->get() as $squestion )
-                                                                        <td style="width: 75px">
-                                                                        {{Form::number( 'emarks[' . $student->id . ']['. $question->id .'][' . $squestion->id . ']', 0,
-                                                                          array('min' => 0, 'max' => $squestion->max_marks, 'class' => 'form-control'))}}
-                                                                        </td>
+                                                                        <td style="width: 75px">{{ $emarks[ $question->id ][ $squestion->id ] }}</td>
                                                                     @endforeach
                                                                 @else
-                                                                    <td style="width: 75px">
-                                                                        {{Form::number( 'emarks[' . $student->id . '][' . $question->id . ']', 0,
-                                                                          array('min' => 0, 'max' => $question->max_marks, 'class' => 'form-control'))}}
-                                                                    </td>
+                                                                    <td style="width: 75px">{{$emarks[ $question->id ]}}</td>
                                                                 @endif
                                                             @endforeach
+                                                            <td>{{ $emarks['total_marks'] }}</td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>

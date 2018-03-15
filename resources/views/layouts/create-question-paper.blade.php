@@ -68,7 +68,7 @@
                                             <label for="question-paper-name" class="field">
                                                 {{  Form::text("question-paper-name", $questionPaperName ?? '', [
                                                     'class' => 'form-control select',
-                                                    'id' => 'question-paper-name' ]) }}
+                                                    'id' => 'question-paper-name', 'required' ]) }}
                                             </label>
                                         </div>
                                     </div>
@@ -82,7 +82,7 @@
                                                     <i class="fa fa-calendar"></i>
                                                 </span>
                                                     <input type="text" id="date" name="date" value=""
-                                                           class="form-control gui-input datetimepicker" placeholder="dd/mm/yyyy">
+                                                           class="form-control gui-input datetimepicker" placeholder="dd/mm/yyyy" required>
                                                 </div>
                                             </label>
                                         </div>
@@ -121,7 +121,7 @@
                                             <label for="questions_to_attempt_part-1" class="field">
                                                 {{  Form::number("parts[1][questions_to_attempt]",  $parts[1]['questions_to_attempt']  ?? 3, [
                                                     'class' => 'form-control select',
-                                                    'id' => 'rollnum', 'min' => 0 ]) }}
+                                                    'id' => 'rollnum', 'min' => 0, 'required' ]) }}
                                             </label>
                                         </div>
                                     </div>
@@ -172,7 +172,7 @@
                                             <div class="col-lg-12">
                                                 <h2>Part A Questions</h2>
                                             </div>
-                                            <table class="table table-bordered mb-0 th-bb-n">
+                                            <table class="table table-bordered mb-0 th-bb-n" id="qp-questions">
                                                 <thead>
                                                     <tr>
                                                         <th>#</th>
@@ -183,36 +183,21 @@
                                                 </thead>
                                                 <tbody>
                                                 @for( $i = 1; $i <= $parts[1]['max_questions']; $i++ )
-                                                    <tr>
+                                                    <tr data-sq="{{ $i }}" data-part="1">
                                                         <td>{{ $i }}</td>
                                                         <td>
-                                                            {{ Form::text( "questions[1][{$i}][question]"  , '',
-                                                            array('class' => 'form-control')) }}
+                                                            {{ Form::text( "questions[1][{$i}][question]"  , 'Q' . $i,
+                                                            array('class' => 'form-control', 'required')) }}
                                                         </td>
                                                         <td class="width-100">
                                                             {{Form::number(  "questions[1][{$i}][max_marks]"  , '',
-                                                              array('class' => 'form-control'))}}
+                                                              array('class' => 'form-control', 'required', 'step' => 0.5))}}
                                                         </td>
                                                         <td class="width-150">
-                                                            <button class="btn btn-sm btn-default remove-mark-type">Add Sub Question</button>
+                                                            <button class="btn btn-sm btn-default add-sub-question">Add Sub Question</button>
                                                         </td>
                                                     </tr>
                                                 @endfor
-
-                                                    <tr>
-                                                        <td>1.1</td>
-                                                        <td>
-                                                            {{ Form::text( "questions[1][1][sub_questions][1][question]"  , '',
-                                                            array('class' => 'form-control')) }}
-                                                        </td>
-                                                        <td class="width-100">
-                                                            {{Form::number(  "questions[1][1][sub_questions][1][max_marks]"  , '',
-                                                              array('class' => 'form-control'))}}
-                                                        </td>
-                                                        <td class="width-150">
-                                                            <button class="btn btn-sm btn-default remove-mark-type">Remove Question</button>
-                                                        </td>
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                             <div class="col-lg-12">
@@ -221,18 +206,18 @@
                                             <table class="table table-bordered mb-0 th-bb-n">
                                                 <tbody>
                                                 @for( $j = $i; $j <= ($parts[2]['max_questions'] + $i-1); $j++ )
-                                                    <tr>
+                                                    <tr  data-sq="{{ $j }}" data-part="2">
                                                         <td>{{ $j }}</td>
                                                         <td>
-                                                            {{ Form::text( "questions[2][{$j}][question]"  , '',
+                                                            {{ Form::text( "questions[2][{$j}][question]"  , 'Q' . $j,
                                                             array('class' => 'form-control' )) }}
                                                         </td>
                                                         <td class="width-100">
                                                             {{ Form::number(  "questions[2][{$j}][max_marks]"  , '',
-                                                              array('class' => 'form-control' )) }}
+                                                              array('class' => 'form-control', 'step' => 0.5 )) }}
                                                         </td>
                                                         <td class="width-150">
-                                                            <button class="btn btn-sm btn-default remove-mark-type">Add Sub Question</button>
+                                                            <button class="btn btn-sm btn-default add-sub-question">Add Sub Question</button>
                                                         </td>
                                                     </tr>
                                                 @endfor

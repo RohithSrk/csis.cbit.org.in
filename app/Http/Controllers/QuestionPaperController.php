@@ -31,8 +31,8 @@ class QuestionPaperController extends Controller
         $exams_arr = Exam::all()->pluck('name', 'id')->toArray();
 //        $exam_id = Exam::find(1)->id;
         $semesters_arr = Semester::all()->pluck( 'name', 'id' )->toArray();
-        $semester_id = Semester::find( 4 )->id;
-        $subjects_arr = Semester::find( 4 )->subjects()->where('type', 'theory')->pluck('name', 'id')->toArray();
+        $semester_id = Semester::find( 1 )->id;
+        $subjects_arr = Semester::find( 1 )->subjects()->where('type', 'theory')->pluck('name', 'id')->toArray();
 
         return view( 'layouts.create-question-paper', compact( 'title',
             'semesters_arr', 'subjects_arr', 'exams_arr', 'semester_id' ) );
