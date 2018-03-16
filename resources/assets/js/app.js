@@ -463,7 +463,6 @@ require('./bootstrap');
         if(viewport().width <= 782){
             $('.site-wrap.dashboard').removeClass('menu-collapsed');
         }
-
     });
 
 })(jQuery);

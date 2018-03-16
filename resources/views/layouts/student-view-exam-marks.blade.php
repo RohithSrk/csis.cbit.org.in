@@ -38,14 +38,15 @@
                                                 @php
                                                     $questionPapers = $exam->questionPapers->whereIN('subject_id', $subject_ids);
                                                     $t1 = $t2 = 0;
+                                                    $i = 1;
                                                 @endphp
-                                                    @foreach( $questionPapers as $i => $questionPaper )
+                                                @foreach( $questionPapers as $questionPaper )
                                                         @php
                                                             $emarks = \App\ExamMark::getMarks( $student_id, $questionPaper->id );
                                                             $questions = $questionPaper->questions;
                                                         @endphp
                                                         <tr>
-                                                            <td class="width-50">{{ $i+1 }}</td>
+                                                            <td class="width-50">{{ $i++ }}</td>
                                                             <td>{{ $questionPaper->subject->name }}</td>
                                                             <td>
                                                             @foreach( $questions as $question )
