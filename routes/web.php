@@ -44,6 +44,8 @@ Route::get( '/lab/manage-mark-types', 'LabMarkTypesController@index' );
 Route::post( '/lab/manage-mark-types', 'LabMarkTypesController@create' );
 Route::put( '/lab/manage-mark-types', 'LabMarkTypesController@store' );
 
+// Feedback Routes
+
 Route::get( '/feedback/list', 'FeedbackController@index' );
 Route::get( '/feedback/view', 'FeedbackController@viewResult' );
 
