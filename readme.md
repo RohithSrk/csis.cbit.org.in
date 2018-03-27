@@ -1,51 +1,56 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# CBIT Student Information System (CSIS)
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+A Laravel backed web application created in house at CBIT to make the internal
+evauation of students easier.
 
-## About Laravel
+## Modules
+* [Lab evaluation](#lab-evaluation)
+* [Feedback](#feedback)
+* [Results](#results)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+## Evaluation
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Evaluation for the labs are done following the process of *Continuous Internal Evaluation*
+(CIE), which is a day based process of evaluating students based on their
+performance for the day on which the lab is conducted.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb combination of simplicity, elegance, and innovation give you tools you need to build any application with which you are tasked.
+### Process for CIE
 
-## Learning Laravel
+* **Creating a record for the day of conducting lab**
 
-Laravel has the most extensive and thorough documentation and video tutorial library of any modern web application framework. The [Laravel documentation](https://laravel.com/docs) is thorough, complete, and makes it a breeze to get started learning the framework.
+  A new record marking that a lab is conducted is created. This record is then
+  used to track and assign marks for the students.
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 900 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+* **Adding marks for each student**
 
-## Laravel Sponsors
+  After creating an entry for the day on which the lab is conducted, then an
+  operator starts adding marks for each student of that batch. Marks are
+  assigned for each category like record submission, attendance etc.
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](http://patreon.com/taylorotwell):
+* **Adding marks for absent students**
 
-- **[Vehikl](http://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Styde](https://styde.net)**
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
+  Students absent for a lab can gain marks for specific purposes for the
+  previous labs conducted by meeting the requirements. The requirements include
+  tasks like completion of previous lab tasks and record submission etc. But
+  marks for absence are never alloted.
 
-## Contributing
+## Feedback
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+> _**Note**: Module in development_
 
-## Security Vulnerabilities
+Feedbacks for lecturers are provided by students only and the stats of the
+feedback can be viewed by lecturers. A student can submit feedback anonymously.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+Feedback reports are categorized based on classes and reports are collected on
+various requirements. Feedback requests are created by _editor_, and the
+students are then asked to provide feedback. These feedbacks are created and
+edited by an _editor_.
 
-## License
+## Results
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+> _**Note**: Module in development_
+
+Results for the lab evalutation and marks for various tests/exams can be viewed
+by students. This allows students to cross check marks with their questions.
+
+Marks for mid exams are entered and managed by the _editor_.
