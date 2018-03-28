@@ -54,3 +54,27 @@ Results for the lab evalutation and marks for various tests/exams can be viewed
 by students. This allows students to cross check marks with their questions.
 
 Marks for mid exams are entered and managed by the _editor_.
+
+### Teacher User Interface Screenshots
+
+![6](images/6.png)
+
+![5](images/5.png)
+
+![4](images/4.png)
+
+
+### Head of Department User Screenshots
+
+![3](images/3.png)
+
+
+### Editor User Interface Screenshots
+
+![2](images/2.png)
+
+![1](images/1.png)
+
+### Mobile View
+
+<img src="images/7.jpeg" width="450">
