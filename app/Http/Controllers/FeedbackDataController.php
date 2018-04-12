@@ -36,15 +36,8 @@ class FeedbackDataController extends Controller
 
 		$semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
 
-		$subjects = $semesters->first()->subjects();
-
-		$subjects_arr = $subjects->select( 'id', DB::raw( "concat(name, ' (', code,')') as name_code" ) )
-		                         ->pluck( 'name_code', 'id' )->toArray();
-
 		$sections     = $semesters->first()->sections();
 		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
-
-		$faculty_arr = Subject::find( $subjects->first()->id )->getAssignedFacultyNames( $sections->first()->id );
 
 		return view( 'layouts.add-feedback', compact( 'title', 'feedback', 'semesters_arr', 'sections_arr' ) );
 	}
@@ -90,8 +83,6 @@ class FeedbackDataController extends Controller
 		$sections     = $semester->sections();
 		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
 
-//		$faculty_arr = Subject::find( $subject_id )->getAssignedFacultyNames( $section_id );
-
 		$criteria = Criterion::all();
 
 		$year = $semester->year()->first();
@@ -124,7 +115,6 @@ class FeedbackDataController extends Controller
 
 		$feedback = Feedback::find( $feedback_id );
 
-//		dd($fdbk_data);
 		//TODO: check if already submitted
 
 		foreach ( $fdbk_data as $subject_id => $fdbk_datum ) {
@@ -165,9 +155,6 @@ class FeedbackDataController extends Controller
 		$semesters_arr = $semesters->pluck( 'name', 'id' )->toArray();
 
 		$semester     = Semester::find( $semester_id );
-		$subjects     = $semester->subjects();
-		$subjects_arr = $subjects->select( 'id', DB::raw( "concat(name, ' (', code,')') as name_code" ) )
-		                         ->pluck( 'name_code', 'id' )->toArray();
 
 		$sections     = $semester->sections();
 		$sections_arr = $sections->pluck( 'name', 'id' )->toArray();
