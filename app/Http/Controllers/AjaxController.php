@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Batch;
+use App\Elective;
 use App\Employee;
 use App\LabWeek;
 use App\Section;
@@ -67,5 +68,13 @@ class AjaxController extends Controller
 
 	public function getFacultySubjects(Employee $employee){
     	return $employee->subjects()->get();
+	}
+
+	public function getElectiveSubjects(Elective $elective){
+    	return $elective->subjects()->get();
+	}
+
+	public function getElectiveSections(Elective $elective){
+    	return Semester::find($elective->semester_id - 1)->sections()->get();
 	}
 }

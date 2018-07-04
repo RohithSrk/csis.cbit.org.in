@@ -17,4 +17,8 @@ class Semester extends Model
     function sections(){
     	return $this->hasMany( Section::class );
     }
+
+    function electives(){
+	    return $this->hasMany( Elective::class );
+    }
 }

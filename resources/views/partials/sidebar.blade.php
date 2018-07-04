@@ -26,24 +26,36 @@
                         class="menu-title">Labmark Division</span></a>
         </li>
         @endif
-        @if(auth()->user()->hasAnyRole(['HOD', 'Editor', 'Principal']))
+        @if(auth()->user()->hasAnyRole(['Editor', 'Principal']))
         <li class="menu-item {{ (request()->is('feedback/create')) ? 'active' : '' }}">
             <a href="{{ action('FeedbackController@create') }}"><i class="fa fa-comment-o"></i><span class="menu-title">Create Feedback</span></a>
         </li>
         @endif
-        @if(auth()->user()->hasAnyRole(['Faculty']))
+        @if(auth()->user()->hasAnyRole(['HOD', 'Faculty']))
+            <li class="menu-item {{ (request()->is('elective-report')) ? 'active' : '' }}">
+                <a href="{{ action('ElectiveReportController@index') }}"><i class="fa fa-area-chart"></i><span
+                            class="menu-title">Elective Report</span></a>
+            </li>
+        @endif
+        @if(auth()->user()->hasAnyRole(['HOD', 'Faculty']))
+            <li class="menu-item {{ (request()->is('elective-stats')) ? 'active' : '' }}">
+                <a href="{{ action('ElectiveReportController@viewGraphs') }}"><i class="fa fa-area-chart"></i><span
+                            class="menu-title">Elective Statistics</span></a>
+            </li>
+        @endif
+        @if(auth()->user()->hasAnyRole(['HOD', 'Editor']))
             <li class="menu-item {{ (request()->is('feedback/view')) ? 'active' : '' }}">
                 <a href="{{ action('FeedbackController@viewResult') }}"><i class="fa fa-area-chart"></i><span
                             class="menu-title">View Feedback</span></a>
             </li>
         @endif
-        @if(auth()->user()->hasAnyRole(['HOD', 'Editor', 'Principal']))
+        @if(auth()->user()->hasAnyRole(['Editor', 'Principal']))
             <li class="menu-item {{ (request()->is('feedback/view-report')) ? 'active' : '' }}">
                 <a href="{{ action('FeedbackController@viewReport') }}"><i class="fa fa-bar-chart-o"></i><span
                             class="menu-title">Feedback Report</span></a>
             </li>
         @endif
-        @if(auth()->user()->hasAnyRole(['HOD', 'Editor']))
+        @if(auth()->user()->hasAnyRole(['Editor']))
         <li class="menu-item {{ (request()->is('feedback/list') || request()->is('feedback-data/*/add')) ? 'active' : '' }}">
             <a href="{{ action('FeedbackController@index') }}"><i class="fa fa-pencil-square-o"></i><span
                         class="menu-title">Manage Feedback Data</span></a>

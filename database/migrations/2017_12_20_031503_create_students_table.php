@@ -28,6 +28,13 @@ class CreateStudentsTable extends Migration
 		    $table->integer( 'user_id' );
 		    $table->timestamps();
 	    } );
+
+	    Schema::create('student_subject', function (Blueprint $table) {
+		    $table->integer('student_id');
+		    $table->integer('subject_id');
+		    $table->integer('section_id');
+		    $table->primary( [ 'student_id', 'subject_id', 'section_id' ] );
+	    });
     }
 
     /**
@@ -38,5 +45,6 @@ class CreateStudentsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('students');
+        Schema::dropIfExists('student_subject');
     }
 }

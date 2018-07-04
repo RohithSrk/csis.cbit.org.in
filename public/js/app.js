@@ -98344,6 +98344,29 @@ __webpack_require__("./resources/assets/js/bootstrap.js");
                     select_faculty.trigger('change');
                 });
             });
+        } else if (/elective-report/.test(window.location.href)) {
+
+            $('#select_elective').change(function (e) {
+                var electiveId = $(this).val();
+
+                $.get('/electives/' + electiveId + '/get-subjects/', function (data) {
+                    select_subject.empty();
+                    $.each(data, function () {
+                        select_subject.append('<option value="' + this.id + '">' + this.name + '</option>');
+                    });
+
+                    $('select.all-selector').multiselect('rebuild');
+                });
+
+                $.get('/electives/' + electiveId + '/get-sections/', function (data) {
+                    select_section.empty();
+                    $.each(data, function () {
+                        select_section.append('<option value="' + this.id + '">' + this.name + '</option>');
+                    });
+
+                    $('select.all-selector').multiselect('rebuild');
+                });
+            });
         } else {
 
             select_subject.change(function (e) {
@@ -98495,6 +98518,26 @@ __webpack_require__("./resources/assets/js/bootstrap.js");
                 if (options.length === 0) {
                     return 'No option selected..';
                 } else if (options.length > 3) {
+                    return options.length + ' options selected';
+                } else {
+                    var labels = [];
+                    options.each(function () {
+                        labels.push($(this).text());
+                    });
+                    return labels.join(', ') + '';
+                }
+            }
+        });
+
+        $('.all-selector').multiselect({
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+            maxHeight: 400,
+            buttonText: function buttonText(options, select) {
+                if (options.length === 0) {
+                    return 'No option selected..';
+                } else if (options.length > 1) {
                     return options.length + ' options selected';
                 } else {
                     var labels = [];

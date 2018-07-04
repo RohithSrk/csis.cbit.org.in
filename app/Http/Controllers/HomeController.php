@@ -43,9 +43,11 @@ class HomeController extends Controller
 	                  ->leftJoin('sections', 'sections.id', '=', 'employee_subject.section_id')
 	                  ->where('employees.id', auth()->user()->employee()->first()->id)->get();
 
-	    $subjects = collect( $subjects )->map( function ( $x ) {
-		    return (array) $x;
-	    } )->toArray();
+//	    $yearSectionName =
+
+//	    $subjects = collect( $subjects )->map( function ( $x ) {
+//		    return (array) $x;
+//	    } )->toArray();
 
 	    return view( 'layouts.home', compact( 'title', 'subjects' ) );
     }

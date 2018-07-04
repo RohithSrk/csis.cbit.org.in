@@ -55,4 +55,9 @@ class Subject extends Model {
 		            ->pluck('name', 'id')
 		            ->toArray();
 	}
+
+	public function getYearSectionName( $section_id ){
+		return \App\Section::getYearSectionName( $section_id );
+	}
+
 }

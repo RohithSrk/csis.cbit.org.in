@@ -18,6 +18,10 @@ class Student extends Model
     	return $this->belongsTo(Batch::class);
     }
 
+	public function subjects(){
+		return $this->belongsToMany(Subject::class);
+	}
+
     public function getLabMarks( $subject_id, $date ){
 	    return Student::join('lab_marks', 'lab_marks.student_id', '=', 'students.id')
 	           ->join('lab_mark_types', 'lab_marks.mark_type_id', '=','lab_mark_types.id')
@@ -45,5 +49,12 @@ class Student extends Model
 
 	public function getSemester(){
 		return $this->batch->section->semester;
+	}
+
+	public function getElectiveSubject( $elective_id ){
+		$elective = Elective::find($elective_id);
+		$subject_ids = $elective->subjects->pluck('id')->toArray();
+
+		return $this->subjects->whereIn('id', $subject_ids)->first()->name;
 	}
 }

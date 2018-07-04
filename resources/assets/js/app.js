@@ -72,7 +72,7 @@ require('./bootstrap');
             date = $('#date');
 
 
-        if( /feedback-data\/\d+\/add/.test(window.location.href) ){
+        if( /feedback-data\/\d+\/add/.test(window.location.href) ) {
 
             select_semester.change(function(e){
                 var semesterId = $(this).val();
@@ -118,6 +118,31 @@ require('./bootstrap');
                         select_faculty.append('<option value="' + k + '">' + v + '</option>');
                     });
                     select_faculty.trigger('change');
+                });
+
+            });
+
+        } else if ( /elective-report/.test(window.location.href) ){
+
+            $('#select_elective').change(function(e){
+                var electiveId = $(this).val();
+
+                $.get( '/electives/'+ electiveId +'/get-subjects/', function(data){
+                    select_subject.empty();
+                    $.each(data, function() {
+                        select_subject.append('<option value="' + this.id + '">' + this.name + '</option>');
+                    });
+
+                    $('select.all-selector').multiselect('rebuild');
+                });
+
+                $.get( '/electives/'+ electiveId +'/get-sections/', function(data){
+                    select_section.empty();
+                    $.each(data, function() {
+                        select_section.append('<option value="' + this.id + '">' + this.name + '</option>');
+                    });
+
+                    $('select.all-selector').multiselect('rebuild');
                 });
 
             });
@@ -288,6 +313,27 @@ require('./bootstrap');
             }
         });
 
+        $('.all-selector').multiselect({
+            enableFiltering: true,
+            enableCaseInsensitiveFiltering: true,
+            includeSelectAllOption: true,
+            maxHeight: 400,
+            buttonText: function(options, select) {
+                if (options.length === 0) {
+                    return 'No option selected..';
+                }
+                else if (options.length > 1) {
+                    return options.length + ' options selected';
+                } else {
+                    var labels = [];
+                    options.each(function() {
+                        labels.push($(this).text());
+                    });
+                    return labels.join(', ') + '';
+                }
+            }
+        });
+
         $('.course-selector.report, .faculty-selector.report').multiselect({
             enableFiltering: true,
             enableCaseInsensitiveFiltering: true,
@@ -380,6 +426,44 @@ require('./bootstrap');
                 data: {
                     labels: chartjsFacultyDSLabels,
                     datasets: chartjsFacultyDatasets[ feedbackId ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            // barPercentage: .5,
+                            // categorySpacing: .3,
+                            ticks: {
+                                beginAtZero: true,
+                                steps: 10,
+                                stepValue: 5,
+                                max: 100
+                            }
+                        }],
+                        yAxes: [{
+                            barPercentage: .8,
+                            // categorySpacing: .3,
+                            ticks: {
+                                beginAtZero: true,
+                            }
+                        }]
+
+                    }
+                }
+            });
+        });
+
+        var electiveCharts = $('.elective-report-chart');
+
+        electiveCharts.each(function(){
+            var electiveId = $(this).data('elective-id');
+
+            new Chart(this.getContext('2d'), {
+                type : 'bar',
+                data: {
+                    labels: chartjsElectiveDSLabels[ electiveId ],
+                    datasets: chartjsElectiveDatasets[ electiveId ]
                 },
                 options: {
                     responsive: true,

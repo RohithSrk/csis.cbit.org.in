@@ -30,9 +30,9 @@
                                         @foreach( $subjects as $num => $subject )
                                             <tr>
                                                 <td class="width-50">{{ $num+1 }}</td>
-                                                <td>{{ $subject['name'] }}</td>
-                                                <td>{{ $subject['code'] }}</td>
-                                                <td>{{ sectionGetYearSectionName( $subject['section_id'] ) }}</td>
+                                                <td>{{ $subject->name }}</td>
+                                                <td>{{ $subject->code }}</td>
+                                                <td></td>
                                             </tr>
                                         @endforeach
                                         @if( empty( $subjects ) )
